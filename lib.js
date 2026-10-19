@@ -228,3 +228,10 @@ function dfeFig() {
       svgL(480, 60, 480, 150, 'arr') + svgP([[480, 150], [440, 150]], id) + svgB(320, 128, 120, 44, 'Feedback filter|(past decisions)') + svgL(320, 150, 250, 150, 'arr') + svgP([[250, 150], [250, 71]], id) + svgT(256, 112, '+', 'sm', 'start');
   }, 460);
 }
+
+/* ---------- variable legend under an expression ---------- */
+/* where([['T<sub>b</sub>', 'bit duration'], ...]) — symbol cells go through inlineMath with the rest of the card. */
+function where(rows) {
+  return '<div class="where"><span class="where-h">where</span><dl>' +
+    rows.map(function (r) { return '<dt>' + r[0] + '</dt><dd>' + r[1] + '</dd>'; }).join('') + '</dl></div>';
+}

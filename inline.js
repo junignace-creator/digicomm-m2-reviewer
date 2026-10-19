@@ -11,7 +11,7 @@ var inlineMath = (function () {
   var OP = '(?:[=+−·×*/≤≥≈≠∼→↔<>]|&lt;|&gt;)', SEP = '(?:\\s|&nbsp;)*';
   var RUN = '[−+]?' + TOK + '(?:' + SEP + OP + '+' + SEP + '[−+]?' + TOK + ')+';
   var STRONG = '(?:' + FN + ARGS + '|(?:' + SYM + '|' + GRK + '|' + NUM + ')' + SUB + '+(?:' + ARGS + ')?|' + SYM + ARGS + '|' + GRK + '(?:' + ARGS + ')?|\\{[^{}]*\\})';
-  var LONE = '(?<![A-Za-z(\u0001-\u0004])[b-zB-HJ-Z](?![A-Za-z)0-9\u0001-\u0004])';
+  var LONE = '(?<![A-Za-z(\u0001-\u0004\'’.])[b-zB-HJ-Z](?![A-Za-z)0-9\u0001-\u0004.])';
   var RE = new RegExp(RUN + '|' + STRONG + '|' + LONE, 'g');
 
   function italic(s) {

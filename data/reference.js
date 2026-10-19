@@ -47,45 +47,45 @@ var RECIPES = [
 var FORMULAS = [
   {
     topic: 'T1 · Baseband PAM & ISI', items: [
-      { name: 'PAM signal', eq: 's(t) = Σ a<sub>k</sub> g(t − kT<sub>b</sub>)' },
-      { name: 'Overall pulse', eq: 'p(t) = g(t) ∗ h(t) ∗ q(t), &nbsp; P(f) = G(f)H(f)Q(f)' },
-      { name: 'Received signal', eq: 'y(t) = Σ a<sub>k</sub> p(t − kT<sub>b</sub>)' },
-      { name: 'Sampled output', eq: 'y(iT<sub>b</sub>) = a<sub>i</sub>p(0) + Σ<sub>k≠i</sub> a<sub>k</sub> p((i − k)T<sub>b</sub>)', note: 'First term: desired symbol. Sum: ISI.' },
-      { name: 'Pulse energy', eq: 'p(0) = √E, &nbsp; E = ∫|p(t)|²dt' }
+      { name: 'PAM signal', eq: 's(t) = Σ a<sub>k</sub> g(t − kT<sub>b</sub>)', vars: [['s(t)','transmitted PAM signal'],['a<sub>k</sub>','level-encoded symbol k (e.g. ±A)'],['g(t)','transmit filter (pulse shape)'],['k','symbol index'],['T<sub>b</sub>','bit duration (s)']] },
+      { name: 'Overall pulse', eq: 'p(t) = g(t) ∗ h(t) ∗ q(t), &nbsp; P(f) = G(f)H(f)Q(f)', vars: [['p(t)','overall pulse'],['g, h, q','transmit filter, channel, receive filter (impulse responses)'],['G, H, Q','their frequency responses'],['∗','convolution']] },
+      { name: 'Received signal', eq: 'y(t) = Σ a<sub>k</sub> p(t − kT<sub>b</sub>)', vars: [['y(t)','receive-filter output'],['a<sub>k</sub>','symbol k'],['p(t)','overall pulse'],['T<sub>b</sub>','bit duration (s)']] },
+      { name: 'Sampled output', eq: 'y(iT<sub>b</sub>) = a<sub>i</sub>p(0) + Σ<sub>k≠i</sub> a<sub>k</sub> p((i − k)T<sub>b</sub>)', note: 'First term: desired symbol. Sum: ISI.', vars: [['y(iT<sub>b</sub>)','i-th sample at the receiver'],['i','sampling index (receiver)'],['k','symbol index (transmitter)'],['a<sub>i</sub>p(0)','desired symbol term'],['a<sub>k</sub>p((i − k)T<sub>b</sub>)','ISI from symbol k']] },
+      { name: 'Pulse energy', eq: 'p(0) = √E, &nbsp; E = ∫|p(t)|²dt', vars: [['p(0)','pulse value at its own sampling instant'],['E','pulse energy (J)'],['p(t)','overall pulse']] }
     ]
   },
   {
     topic: 'T2 · Nyquist & raised cosine', items: [
-      { name: 'Zero-ISI condition', eq: 'p((i − k)T<sub>b</sub>) = √E (i = k), 0 (i ≠ k)' },
-      { name: 'Nyquist criterion', eq: '(1/T<sub>b</sub>) Σ P(f − n/T<sub>b</sub>) = √E', note: 'Equal to 1 for a normalised pulse.' },
-      { name: 'Ideal Nyquist channel', eq: 'P<sub>opt</sub>(f) = √E/(2W), |f| < W &nbsp;⇔&nbsp; p<sub>opt</sub>(t) = √E sinc(2Wt) = √E sin(2πWt)/(2πWt)' },
-      { name: 'Nyquist bandwidth / rate', eq: 'W = R<sub>b</sub>/2 = 1/(2T<sub>b</sub>), &nbsp; R<sub>b</sub> = 2W' },
-      { name: 'Roll-off factor', eq: 'α = 1 − f<sub>1</sub>/W, &nbsp; f<sub>1</sub> = W(1 − α)' },
-      { name: 'Raised-cosine roll-off region', eq: 'P(f) = (√E/4W)[1 + cos(π(|f| − f<sub>1</sub>)/(2(W − f<sub>1</sub>)))], &nbsp; f<sub>1</sub> ≤ |f| < 2W − f<sub>1</sub>', note: 'Flat √E/(2W) below f<sub>1</sub>; zero above 2W − f<sub>1</sub>.' },
-      { name: 'Raised-cosine pulse', eq: 'p(t) = √E sinc(2Wt)·cos(2παWt)/(1 − 16α²W²t²)', note: 'α = 1: √E sinc(4Wt)/(1 − 16W²t²).' },
-      { name: 'Transmission bandwidth', eq: 'B<sub>T</sub> = 2W − f<sub>1</sub> = W(1 + α)', note: '<span class="watch">⚠</span> αW is the excess bandwidth.' }
+      { name: 'Zero-ISI condition', eq: 'p((i − k)T<sub>b</sub>) = √E (i = k), 0 (i ≠ k)', vars: [['p(·)','overall pulse'],['i, k','sampling index, symbol index'],['T<sub>b</sub>','bit duration (s)'],['E','pulse energy (J)']] },
+      { name: 'Nyquist criterion', eq: '(1/T<sub>b</sub>) Σ P(f − n/T<sub>b</sub>) = √E', note: 'Equal to 1 for a normalised pulse.', vars: [['P(f)','spectrum of the overall pulse'],['n','replica number (shift by n/T<sub>b</sub> = nR<sub>b</sub>)'],['f','frequency (Hz)'],['T<sub>b</sub>','bit duration (s)'],['E','pulse energy (J)']] },
+      { name: 'Ideal Nyquist channel', eq: 'P<sub>opt</sub>(f) = √E/(2W), |f| < W &nbsp;⇔&nbsp; p<sub>opt</sub>(t) = √E sinc(2Wt) = √E sin(2πWt)/(2πWt)', vars: [['P<sub>opt</sub>(f), p<sub>opt</sub>(t)','brick-wall spectrum and its sinc pulse'],['W','Nyquist bandwidth = R<sub>b</sub>/2 (Hz)'],['E','pulse energy (J)'],['sinc(x)','sin(πx)/(πx)']] },
+      { name: 'Nyquist bandwidth / rate', eq: 'W = R<sub>b</sub>/2 = 1/(2T<sub>b</sub>), &nbsp; R<sub>b</sub> = 2W', vars: [['W','Nyquist bandwidth = R<sub>b</sub>/2 (Hz)'],['R<sub>b</sub>','bit rate = 1/T<sub>b</sub> (bits/s)'],['T<sub>b</sub>','bit duration (s)']] },
+      { name: 'Roll-off factor', eq: 'α = 1 − f<sub>1</sub>/W, &nbsp; f<sub>1</sub> = W(1 − α)', vars: [['α','roll-off factor, 0 ≤ α ≤ 1'],['f<sub>1</sub>','edge of the flat part of the spectrum (Hz)'],['W','Nyquist bandwidth = R<sub>b</sub>/2 (Hz)']] },
+      { name: 'Raised-cosine roll-off region', eq: 'P(f) = (√E/4W)[1 + cos(π(|f| − f<sub>1</sub>)/(2(W − f<sub>1</sub>)))], &nbsp; f<sub>1</sub> ≤ |f| < 2W − f<sub>1</sub>', note: 'Flat √E/(2W) below f<sub>1</sub>; zero above 2W − f<sub>1</sub>.', vars: [['P(f)','raised-cosine spectrum'],['f','frequency (Hz)'],['f<sub>1</sub>','edge of the flat part of the spectrum (Hz)'],['W','Nyquist bandwidth = R<sub>b</sub>/2 (Hz)'],['E','pulse energy (J)'],['2W − f<sub>1</sub>','band edge']] },
+      { name: 'Raised-cosine pulse', eq: 'p(t) = √E sinc(2Wt)·cos(2παWt)/(1 − 16α²W²t²)', note: 'α = 1: √E sinc(4Wt)/(1 − 16W²t²).', vars: [['p(t)','raised-cosine pulse'],['t','time (s)'],['W','Nyquist bandwidth = R<sub>b</sub>/2 (Hz)'],['α','roll-off factor, 0 ≤ α ≤ 1'],['E','pulse energy (J)']] },
+      { name: 'Transmission bandwidth', eq: 'B<sub>T</sub> = 2W − f<sub>1</sub> = W(1 + α)', note: '<span class="watch">⚠</span> αW is the excess bandwidth.', vars: [['B<sub>T</sub>','occupied transmission bandwidth (Hz)'],['W','Nyquist bandwidth = R<sub>b</sub>/2 (Hz)'],['αW','excess bandwidth (Hz)'],['f<sub>1</sub>','edge of the flat part of the spectrum (Hz)']] }
     ]
   },
   {
     topic: 'T3 · Noise & random processes', items: [
-      { name: 'Gaussian PDF', eq: 'f<sub>X</sub>(x) = (1/√(2πσ²)) exp(−(x − μ)²/(2σ²))' },
-      { name: 'Linear transforms', eq: 'cX + d ~ N(cμ + d, c²σ²); &nbsp; X + Y ~ N(μ<sub>X</sub> + μ<sub>Y</sub>, σ<sub>X</sub>² + σ<sub>Y</sub>²)', note: 'Sum rule needs independence.' },
-      { name: 'Q-function', eq: 'Q(x) = Pr{Z > x} = 1 − Φ(x) = (1/√(2π))∫<sub>x</sub><sup>∞</sup> exp(−s²/2) ds', note: '<span class="watch">⚠</span> Normalise first: Pr{X > a} = Q((a − μ)/σ).' },
-      { name: 'CDF properties', eq: 'Pr{a ≤ X ≤ b} = F(b) − F(a); &nbsp; Pr{X > a} = 1 − F(a)' },
-      { name: 'CLT', eq: 'Z = (Y − E[Y])/σ<sub>Y</sub> → N(0, 1)', note: 'Y = sum of n i.i.d. RVs, n → ∞.' },
-      { name: 'Autocorrelation (WSS)', eq: 'R<sub>X</sub>(τ) = E[X(t)X(t − τ)], &nbsp; R<sub>X</sub>(0) = E[X²]' },
-      { name: 'Wiener–Khintchine', eq: 'S<sub>X</sub>(f) = ∫R<sub>X</sub>(τ) exp(−j2πfτ) dτ, &nbsp; E[X²] = ∫S<sub>X</sub>(f)df' },
-      { name: 'Filtered process', eq: 'S<sub>Y</sub>(f) = |H(f)|² S<sub>X</sub>(f)' },
-      { name: 'White noise', eq: 'R<sub>W</sub>(τ) = (N<sub>0</sub>/2)δ(τ), &nbsp; S<sub>W</sub>(f) = N<sub>0</sub>/2, &nbsp; N<sub>0</sub> = kT<sub>e</sub>' },
-      { name: 'Noise power through h', eq: 'P<sub>N</sub> = (N<sub>0</sub>/2)∫|H(f)|²df = (N<sub>0</sub>/2)∫|h(τ)|²dτ' }
+      { name: 'Gaussian PDF', eq: 'f<sub>X</sub>(x) = (1/√(2πσ²)) exp(−(x − μ)²/(2σ²))', vars: [['f<sub>X</sub>(x)','PDF of random variable X at value x'],['μ','mean'],['σ², σ','variance, standard deviation']] },
+      { name: 'Linear transforms', eq: 'cX + d ~ N(cμ + d, c²σ²); &nbsp; X + Y ~ N(μ<sub>X</sub> + μ<sub>Y</sub>, σ<sub>X</sub>² + σ<sub>Y</sub>²)', note: 'Sum rule needs independence.', vars: [['X, Y','independent Gaussian random variables'],['c, d','constants (scale, shift)'],['N(μ, σ²)','Gaussian with mean μ and variance σ²']] },
+      { name: 'Q-function', eq: 'Q(x) = Pr{Z > x} = 1 − Φ(x) = (1/√(2π))∫<sub>x</sub><sup>∞</sup> exp(−s²/2) ds', note: '<span class="watch">⚠</span> Normalise first: Pr{X > a} = Q((a − μ)/σ).', vars: [['Q(x)','tail probability of the standard Gaussian'],['Z','standard Gaussian N(0, 1)'],['Φ(x)','standard Gaussian CDF'],['x','normalised threshold (a − μ)/σ'],['s','dummy integration variable']] },
+      { name: 'CDF properties', eq: 'Pr{a ≤ X ≤ b} = F(b) − F(a); &nbsp; Pr{X > a} = 1 − F(a)', vars: [['F(x)','CDF: Pr{X ≤ x}'],['a, b','interval limits'],['X','the random variable']] },
+      { name: 'CLT', eq: 'Z = (Y − E[Y])/σ<sub>Y</sub> → N(0, 1)', note: 'Y = sum of n i.i.d. RVs, n → ∞.', vars: [['Y','sum of n i.i.d. random variables'],['E[Y], σ<sub>Y</sub>','mean and standard deviation of Y'],['Z','normalised sum'],['N(0, 1)','standard Gaussian']] },
+      { name: 'Autocorrelation (WSS)', eq: 'R<sub>X</sub>(τ) = E[X(t)X(t − τ)], &nbsp; R<sub>X</sub>(0) = E[X²]', vars: [['R<sub>X</sub>(τ)','autocorrelation of process X(t)'],['τ','lag between the two samples (s)'],['E[·]','expectation (average)'],['R<sub>X</sub>(0) = E[X²]','average power']] },
+      { name: 'Wiener–Khintchine', eq: 'S<sub>X</sub>(f) = ∫R<sub>X</sub>(τ) exp(−j2πfτ) dτ, &nbsp; E[X²] = ∫S<sub>X</sub>(f)df', vars: [['S<sub>X</sub>(f)','power spectral density (W/Hz)'],['R<sub>X</sub>(τ)','autocorrelation'],['f','frequency (Hz)'],['E[X²]','mean-square value = power']] },
+      { name: 'Filtered process', eq: 'S<sub>Y</sub>(f) = |H(f)|² S<sub>X</sub>(f)', vars: [['S<sub>X</sub>, S<sub>Y</sub>','input and output PSDs'],['H(f)','filter frequency response; |H|² = power gain']] },
+      { name: 'White noise', eq: 'R<sub>W</sub>(τ) = (N<sub>0</sub>/2)δ(τ), &nbsp; S<sub>W</sub>(f) = N<sub>0</sub>/2, &nbsp; N<sub>0</sub> = kT<sub>e</sub>', vars: [['R<sub>W</sub>(τ)','noise autocorrelation'],['δ(τ)','Dirac delta (non-zero only at τ = 0)'],['S<sub>W</sub>(f)','noise PSD'],['N<sub>0</sub>/2','two-sided white-noise PSD (W/Hz)'],['k','Boltzmann’s constant, 1.380649 × 10<sup>−23</sup> J/K'],['T<sub>e</sub>','noise temperature in kelvin']] },
+      { name: 'Noise power through h', eq: 'P<sub>N</sub> = (N<sub>0</sub>/2)∫|H(f)|²df = (N<sub>0</sub>/2)∫|h(τ)|²dτ', vars: [['P<sub>N</sub>','output noise power (W)'],['H(f), h(τ)','filter frequency and impulse response'],['N<sub>0</sub>/2','two-sided white-noise PSD (W/Hz)']] }
     ]
   },
   {
     topic: 'T4 · Matched filter & eye', items: [
-      { name: 'Output SNR (any h)', eq: 'SNR = P<sub>d</sub>(∫g(T − τ)h(τ)dτ)² / ((N<sub>0</sub>/2)∫|h(τ)|²dτ)' },
-      { name: 'Matched filter', eq: 'h<sub>opt</sub>(t) = k g(T − t)' },
-      { name: 'Maximum SNR', eq: 'SNR<sub>max</sub> = (2E/N<sub>0</sub>) P<sub>d</sub>', note: 'Depends on energy only, not on pulse shape.' },
-      { name: 'Polar error probability', eq: 'P<sub>e</sub> = Q(√(2E/N<sub>0</sub>))' }
+      { name: 'Output SNR (any h)', eq: 'SNR = P<sub>d</sub>(∫g(T − τ)h(τ)dτ)² / ((N<sub>0</sub>/2)∫|h(τ)|²dτ)', vars: [['SNR','signal-to-noise ratio at t = T'],['P<sub>d</sub>','data-symbol power E[a<sub>0</sub>²]'],['g','transmit pulse'],['h','receive filter'],['T','sampling instant / symbol duration'],['τ','integration variable'],['N<sub>0</sub>/2','two-sided white-noise PSD (W/Hz)']] },
+      { name: 'Matched filter', eq: 'h<sub>opt</sub>(t) = k g(T − t)', vars: [['h<sub>opt</sub>(t)','optimum receive filter'],['k','any constant gain'],['g(T − t)','transmit pulse folded and shifted by T']] },
+      { name: 'Maximum SNR', eq: 'SNR<sub>max</sub> = (2E/N<sub>0</sub>) P<sub>d</sub>', note: 'Depends on energy only, not on pulse shape.', vars: [['E','pulse energy (J)'],['P<sub>d</sub>','data-symbol power (1 if normalised)'],['N<sub>0</sub>','noise density (W/Hz)']] },
+      { name: 'Polar error probability', eq: 'P<sub>e</sub> = Q(√(2E/N<sub>0</sub>))', vars: [['P<sub>e</sub>','bit-error probability'],['Q(·)','Q-function'],['E','pulse energy (J)'],['N<sub>0</sub>','noise density (W/Hz)']] }
     ]
   }
 ];

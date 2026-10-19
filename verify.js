@@ -158,8 +158,11 @@ check('T6-03 signs', [1 * 1, 1 * -1, -1 * 1, -1 * -1], [1, -1, -1, 1]);
 const ctx = { console }; vm.createContext(ctx);
 ['lib.js', 'data/topics.js', 'data/problems.js', 'data/problems-m22.js', 'data/glossary.js', 'data/glossary-m22.js', 'data/concepts.js', 'data/concepts-m22.js', 'data/plan.js', 'data/reference.js', 'data/reference-m22.js']
   .forEach(f => vm.runInContext(fs.readFileSync(f, 'utf8'), ctx, { filename: f }));
-vm.runInContext('this.__d = { PROBLEMS, TOPICS, CONCEPTS, PLAN, GLOSSARY }', ctx);
-const { PROBLEMS, TOPICS, CONCEPTS, PLAN, GLOSSARY } = ctx.__d;
+vm.runInContext('this.__d = { PROBLEMS, TOPICS, CONCEPTS, PLAN, GLOSSARY, FORMULAS }', ctx);
+const { PROBLEMS, TOPICS, CONCEPTS, PLAN, GLOSSARY, FORMULAS } = ctx.__d;
+// every expression in Concepts and every formula needs a variable legend (where())
+CONCEPTS.forEach(c => c.sections.forEach(s => { const mbs = (s.html.match(/class="math-block"/g) || []).length, ws = (s.html.match(/class="where"/g) || []).length; ok(c.label + ' / ' + s.h + ': ' + mbs + ' expressions but ' + ws + ' legends', mbs === ws); }));
+FORMULAS.forEach(g => g.items.forEach(it => ok('formula without vars: ' + it.name, Array.isArray(it.vars) && it.vars.length > 0)));
 const terms = new Set();
 GLOSSARY.forEach(g => { ok('glossary entry shape ' + g[0], g.length === 3 && g[1].length > 10); ok('glossary topic ' + g[0], g[2] in TOPICS); ok('duplicate term ' + g[0], !terms.has(g[0])); terms.add(g[0]); });
 const ids = new Set();

@@ -224,7 +224,7 @@ function renderFormulas() {
     var card = document.createElement('div'); card.className = 'card';
     g.items.forEach(function (it) {
       var d = document.createElement('div'); d.className = 'formula-item';
-      d.innerHTML = '<div class="formula-name">' + it.name + '</div><div class="math-block">' + mathify(it.eq) + '</div>' + (it.note ? '<div class="formula-note">' + inlineMath(it.note) + '</div>' : '');
+      d.innerHTML = '<div class="formula-name">' + it.name + '</div><div class="math-block">' + mathify(it.eq) + '</div>' + (it.note ? '<div class="formula-note">' + inlineMath(it.note) + '</div>' : '') + (it.vars ? inlineMath(where(it.vars)) : '');
       card.appendChild(d);
     });
     root.appendChild(card);

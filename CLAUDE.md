@@ -17,6 +17,8 @@ The user chats with Claude about this repo to add problems, fix answers, and dri
   `verify.js` also checks unique ids, valid topics, that every `data-goto` link resolves, and that every problem appears in the study plan once sessions exist.
 - Identification terms: `data/glossary.js`, `GLOSSARY = [[term, definition, topic]]`. Add terms for every new topic (definitions 1–2 sentences,
   phrased the way the slides/lecturer phrase them). Each study-plan session gets an Identification task.
+- **Every expression needs a variable legend.** In Concepts, follow each `mb(...)` with `where([[symbol, meaning], …])`; Formula
+  Sheet items take `vars: [[symbol, meaning], …]`. `verify.js` fails if a math block or formula has no legend.
 - Inline math is auto-formatted by `inline.js`; formula sheet runs `mathify()`. Don't hand-italicize.
 - localStorage keys: `digicomm-m2-state-v1`, `digicomm-m2-plan-v1`, `digicomm-m2-concept-tab` — don't rename without migrating.
 - Preview: `node serve.js` → http://localhost:8123. Live site (GitHub Pages, main / root): https://junignace-creator.github.io/digicomm-m2-reviewer/
