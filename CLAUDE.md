@@ -27,6 +27,8 @@ The user chats with Claude about this repo to add problems, fix answers, and dri
   appear in that concept tab — the user could not tell what T<sub>b</sub> meant in a plain list.
 - Inline math is auto-formatted by `inline.js`; formula sheet runs `mathify()`. Don't hand-italicize.
 - localStorage keys: `digicomm-m2-state-v1`, `digicomm-m2-plan-v1`, `digicomm-m2-concept-tab` — don't rename without migrating.
+- **Cache-busting:** GitHub Pages caches files for 10 min. Every local `<script src>` in index.html carries `?v=YYYYMMDDx`;
+  bump it (all at once) on every push that changes JS, or browsers can mix a new page with old scripts.
 - Preview: `node serve.js` → http://localhost:8123. Live site (GitHub Pages, main / root): https://junignace-creator.github.io/digicomm-m2-reviewer/
 
 ## Source material
