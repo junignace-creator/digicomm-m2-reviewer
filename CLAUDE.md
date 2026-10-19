@@ -19,7 +19,7 @@ The user chats with Claude about this repo to add problems, fix answers, and dri
   phrased the way the slides/lecturer phrase them). Each study-plan session gets an Identification task.
 - Inline math is auto-formatted by `inline.js`; formula sheet runs `mathify()`. Don't hand-italicize.
 - localStorage keys: `digicomm-m2-state-v1`, `digicomm-m2-plan-v1`, `digicomm-m2-concept-tab` — don't rename without migrating.
-- Preview: `node serve.js` → http://localhost:8123.
+- Preview: `node serve.js` → http://localhost:8123. Live site (GitHub Pages, main / root): https://junignace-creator.github.io/digicomm-m2-reviewer/
 
 ## Source material
 Slides and notes go in `source/slides/` and `source/notes/` (git-ignored — instructor's material).

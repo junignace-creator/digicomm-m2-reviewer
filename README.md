@@ -2,6 +2,8 @@
 
 A problem-focused reviewer for **Digital Communications — Module 2**, built like the DSP Problem Drill.
 
+**Open it:** https://junignace-creator.github.io/digicomm-m2-reviewer/
+
 | Topic | Covers |
 |---|---|
 | T1 · Baseband PAM & ISI | PAM chain, overall pulse p(t), ISI at the sampling instant |
