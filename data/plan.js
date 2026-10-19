@@ -10,6 +10,62 @@ var PLAN = {
     '<b>Redo:</b> hide the solution and solve the same problem again from a blank page.',
     '<b>Grade honestly:</b> <i>Got it</i> only if the redo worked without peeking; otherwise <i>Missed</i>.'
   ],
-  quick: null,
-  sessions: []
+  quick: {
+    title: 'Short on time? The survival set',
+    when: 'One evening before a quiz on Part 1. These cover the computations most likely to be asked.',
+    tasks: [
+      ['Nyquist bandwidth and raised-cosine bandwidth: ' + P('T2-01', 'T2-03', 'T2-04') + '. Read ' + C(2, 3) + ' and ' + C(2, 6) + '.', '35m'],
+      ['Q-function with normalisation: ' + P('T3-01', 'T3-04') + '. Read ' + C(3, 3) + '.', '25m'],
+      ['Matched filter examples from the slides: ' + P('T4-01', 'T4-02', 'T4-03') + '.', '40m'],
+      ['ISI by hand: ' + P('T1-02') + '. Then read the whole <b>Cheat List</b>.', '25m']
+    ]
+  },
+  sessions: [
+    {
+      day: 'Session 1', focus: 'T1 · Baseband PAM and ISI',
+      tasks: [
+        ['Read ' + C(1, 1, 2) + ': the block diagram and why three convolutions become one p(t).', '20m'],
+        ['Solve ' + P('T1-01') + ' (PNRZ and s(t)).', '15m'],
+        ['Read ' + C(1, 3, 4) + ' (ISI, the pulse-shaping problem).', '15m'],
+        ['Solve ' + P('T1-02', 'T1-03', 'T1-04') + ' using <b>Recipes → ISI at a sampling instant</b>.', '40m']
+      ]
+    },
+    {
+      day: 'Session 2', focus: 'T2 · Nyquist channel and raised cosine',
+      tasks: [
+        ['Read ' + C(2, 1, 4) + ': zero-ISI condition, Nyquist criterion, brick wall ↔ sinc, why it is impractical.', '30m'],
+        ['Solve ' + P('T2-01') + '.', '10m'],
+        ['Read ' + C(2, 5, 6) + ' (raised cosine, α, B<sub>T</sub>).', '25m'],
+        ['Solve ' + P('T2-02', 'T2-03', 'T2-04', 'T2-05', 'T2-06') + '.', '50m'],
+        ['Design: ' + P('DS-01') + '.', '20m']
+      ]
+    },
+    {
+      day: 'Session 3', focus: 'T3 · Gaussian noise, Q-function, random processes',
+      tasks: [
+        ['Read ' + C(3, 1, 3) + '. Practise reading the Q-table on Q(1), Q(2), Q(2.5).', '30m'],
+        ['Solve ' + P('T3-01', 'T3-02', 'T3-04') + '.', '35m'],
+        ['Read ' + C(3, 4, 7) + ' (CLT, stationarity, autocorrelation, PSD, white noise).', '35m'],
+        ['Solve ' + P('T3-03', 'T3-05', 'T3-06', 'T3-07') + '.', '40m']
+      ]
+    },
+    {
+      day: 'Session 4', focus: 'T4 · Matched filter and eye pattern',
+      tasks: [
+        ['Read ' + C(4, 1, 3) + '. Re-derive SNR ≤ 2E·P<sub>d</sub>/N<sub>0</sub> on paper once.', '30m'],
+        ['Solve the slide examples ' + P('T4-01', 'T4-02') + ' with <b>Recipes → Matched-filter output</b>.', '35m'],
+        ['Solve ' + P('T4-03', 'T4-04', 'T4-05') + '.', '30m'],
+        ['Read ' + C(4, 4) + ' and solve ' + P('T4-06') + '.', '25m'],
+        ['Design: ' + P('DS-02') + '.', '25m']
+      ]
+    },
+    {
+      day: 'Session 5', focus: 'Mixed review',
+      tasks: [
+        ['<b>Drill</b> tab, all topics, "Unsolved + missed": 6 problems against the clock.', '60m'],
+        ['Formula Sheet: cover the right side and recite each formula.', '20m'],
+        ['Redo everything marked <i>Missed</i>, then read the Cheat List.', '40m']
+      ]
+    }
+  ]
 };

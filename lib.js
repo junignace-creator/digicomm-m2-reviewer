@@ -181,3 +181,27 @@ function df1Fig(o) {
     return s;
   }, 540);
 }
+
+/* ---------- continuous curve plot ---------- */
+/* o: {series:[{fn, cls:'wave'|'wave2'|'wave3', name}], xlo, xhi, ylo, yhi, xt:[[x,'label']], yt:[[y,'label']], xl:'t', h, cap, label}
+   fn(x) may return NaN to break the line. Legend is drawn from series names. */
+function curveFig(o) {
+  var W = 560, H = o.h || 200, ml = 52, mr = 26, top = 18, bot = 28;
+  function X(x) { return ml + (x - o.xlo) / (o.xhi - o.xlo) * (W - ml - mr); }
+  function Y(y) { return top + (o.yhi - y) / (o.yhi - o.ylo) * (H - top - bot); }
+  return svgFig(W, H, o.cap, o.label, function () {
+    var y0 = Y(Math.max(o.ylo, Math.min(o.yhi, 0))), x0 = X(Math.max(o.xlo, Math.min(o.xhi, 0)));
+    var s = svgL(ml - 6, y0, W - mr + 6, y0, 'ax') + svgL(x0, top - 6, x0, H - bot + 6, 'ax') + svgT(W - mr + 4, y0 - 6, o.xl || 't', 'sm', 'end');
+    (o.xt || []).forEach(function (t) { s += svgL(X(t[0]), y0 - 3, X(t[0]), y0 + 3, 'ax') + svgT(X(t[0]), y0 + 15, t[1], 'sm', ''); });
+    (o.yt || []).forEach(function (t) { s += svgL(x0 - 3, Y(t[0]), x0 + 3, Y(t[0]), 'ax') + svgL(ml, Y(t[0]), W - mr, Y(t[0]), 'grid') + svgT(ml - 4, Y(t[0]) + 4, t[1], 'sm', 'end'); });
+    o.series.forEach(function (se, k) {
+      var pts = [], i, n = 400, d = '';
+      for (i = 0; i <= n; i++) { var x = o.xlo + (o.xhi - o.xlo) * i / n, y = se.fn(x); pts.push(isFinite(y) ? X(x).toFixed(1) + ',' + Y(Math.max(o.ylo - 1, Math.min(o.yhi + 1, y))).toFixed(1) : null); }
+      pts.forEach(function (p, j) { if (p) d += (j && pts[j - 1] ? ' L' : ' M') + p; });
+      s += '<path d="' + d + '" class="' + (se.cls || 'wave') + '"/>';
+      if (se.name) s += '<line x1="' + (W - mr - 120) + '" y1="' + (top + 4 + k * 14) + '" x2="' + (W - mr - 102) + '" y2="' + (top + 4 + k * 14) + '" class="' + (se.cls || 'wave') + '"/>' + svgT(W - mr - 98, top + 8 + k * 14, se.name, 'sm', 'start');
+    });
+    return s;
+  });
+}
+function sinc(x) { return x === 0 ? 1 : Math.sin(Math.PI * x) / (Math.PI * x); }

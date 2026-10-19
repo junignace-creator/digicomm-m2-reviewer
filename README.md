@@ -4,14 +4,19 @@ A problem-focused reviewer for **Digital Communications — Module 2**, built li
 
 | Topic | Covers |
 |---|---|
-| _to be filled in from the module notes_ | |
+| T1 · Baseband PAM & ISI | PAM chain, overall pulse p(t), ISI at the sampling instant |
+| T2 · Nyquist channel & raised cosine | Zero-ISI condition, Nyquist criterion, brick wall ↔ sinc, roll-off α, B<sub>T</sub> = W(1 + α) |
+| T3 · Noise & random processes | AWGN, Gaussian RV properties, CDF/PDF, Q-function, CLT, stationarity, autocorrelation, PSD |
+| T4 · Matched filter & eye pattern | Optimal receiver, h = g(T − t), SNR = 2E/N<sub>0</sub>, eye diagram reading |
+
+Part 1 (M2-1, Baseband Pulse Transmission) is in; Part 2 (equalization & synchronization) comes next.
 
 ## What's inside
 
 - **Study Plan** — sessions in topic order; tick tasks off, links jump to the concept section or problem.
 - **Concepts** — plain-language explanation of every idea, a tiny hand-checkable example each, self-check questions.
-- **Sample Problems** — worked solutions in steps. Self-grade each with *Got it* / *Missed*.
-- **Design Problems** — spec → design / sizing → verify → trade-offs.
+- **Sample Problems** (23) — worked solutions in steps. Self-grade each with *Got it* / *Missed*.
+- **Design Problems** (2) — spec → design / sizing → verify → trade-offs.
 - **Drill** — random problem from a pool you pick, with a timer.
 - **Recipes**, **Formula Sheet** and **Cheat List**.
 
