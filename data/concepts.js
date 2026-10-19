@@ -171,36 +171,50 @@ var CONCEPTS = [
       html: `
       <p>If X<sub>1</sub> … X<sub>n</sub> are i.i.d. (independent, identically distributed, with finite mean and variance), the normalised sum Z = (Y − E[Y])/σ<sub>Y</sub> of Y = ΣX<sub>i</sub> tends to N(0, 1) as n grows — <i>whatever</i> the individual distribution.</p>
       <p>Thermal noise is the sum of a huge number of tiny independent electron contributions, so it is Gaussian.</p>
-      ${use(['T3-06'])}`
+      <p>"Statistically independent" means the variables are uncorrelated; "identically distributed" means they share the same PDF — Gaussian or not. Normalising = subtract the mean, then divide by the standard deviation.</p>
+      ${callout('Why the lecturer cares', 'Once something is Gaussian we know all its properties and can use the Q-function. The CLT is what lets us call white noise a <b>Gaussian random process</b>.')}
+      ${use(['T3-06', 'T3-08'])}`
     },
     {
       h: '5. Random processes and stationarity',
       html: `
-      <p>A <b>random process</b> X(t) is a collection (ensemble) of random waveforms; each one is a <i>sample function</i>. Freezing time at t<sub>1</sub> gives a random variable X(t<sub>1</sub>).</p>
+      <p>A <b>random process</b> X(t) is a collection (ensemble) of random variables evolving over time. Each waveform x<sub>i</sub>(t) is a <i>realization</i> (sample function). Freezing time at t<sub>1</sub> gives a random variable X(t<sub>1</sub>).</p>
+      ${callout('Lecture analogy: N audio generators', 'Imagine N audio generators, each producing different values. Watching <b>one</b> generator on an oscilloscope over time = one <b>realization / sample function</b>. Reading <b>all</b> generators at the same instant t<sub>1</sub> = one <b>random variable</b>. The whole collection evolving over time = the <b>random process</b>.')}
+      <p><b>Stationary:</b> cut the process into time intervals and compute the statistics (mean, standard deviation…) in each. If they are the same in every interval, the process is stationary.</p>
+      ${callout('Lecture examples', '<b>Stationary:</b> channel noise — same statistics whichever interval you look at. <b>Non-stationary:</b> weather temperature — it fluctuates daily, but its statistics drift (rise or fall) from one interval to another.')}
       <ul>
-        <li><b>1st-order stationary:</b> the PDF at any single time does not depend on t ⇒ constant mean and variance.</li>
-        <li><b>2nd-order stationary:</b> the joint PDF of two samples depends only on the lag τ = t<sub>2</sub> − t<sub>1</sub>.</li>
-        <li><b>SSS</b> (strict sense): true for every order. <b>WSS</b> (wide sense): only the mean and the autocorrelation are time-invariant — enough for noise analysis.</li>
-      </ul>`
+        <li><b>1st-order stationary:</b> the distribution at one time is the same at any other time ⇒ mean and variance are constant (single-point statistics).</li>
+        <li><b>2nd-order stationary:</b> the joint distribution of samples at (t<sub>1</sub>, t<sub>2</sub>) equals that at (t<sub>1</sub> + Δt, t<sub>2</sub> + Δt) ⇒ covariance and correlation (<b>two-point statistics</b>) depend only on the lag τ = t<sub>2</sub> − t<sub>1</sub>, not on absolute time.</li>
+        <li><b>SSS</b> (strict sense): stationary for every order k and every time shift — mathematically complex to show. <b>WSS</b> (wide sense): only 1st and 2nd order — sufficient for communications computations.</li>
+      </ul>
+      <p><b>Noise as a random process:</b> each electron's motion is like a random variable; the circuit's huge number of electrons is an ensemble ⇒ a random process. Adding them all (CLT) makes it Gaussian. So channel noise is a <b>WSS Gaussian random process</b>.</p>
+      <p>A random process is described in the <b>amplitude domain</b> (PDF, CDF) or the <b>time domain</b> (autocorrelation, PSD).</p>
+      ${use(['T3-09'])}`
     },
     {
       h: '6. Autocorrelation and PSD',
       html: `
-      <p><b>Autocorrelation</b> R<sub>X</sub>(τ) = E[X(t)X(t − τ)]: how alike the process is with itself τ seconds apart. For a real WSS process:</p>
-      <ol><li>R<sub>X</sub>(0) = E[X²] = average power.</li><li>Even: R<sub>X</sub>(−τ) = R<sub>X</sub>(τ).</li><li>Maximum at 0: R<sub>X</sub>(0) ≥ |R<sub>X</sub>(τ)|.</li></ol>
-      <p><b>Wiener–Khintchine:</b> the PSD is the Fourier transform of the autocorrelation, S<sub>X</sub>(f) = ∫R<sub>X</sub>(τ)e<sup>−j2πfτ</sup>dτ.</p>
-      <p>PSD properties: area under S<sub>X</sub>(f) = E[X²] (power); S<sub>X</sub>(f) ≥ 0; even in f; and through a filter: <b>S<sub>Y</sub>(f) = |H(f)|² S<sub>X</sub>(f)</b>.</p>
+      <p><b>Autocorrelation</b> R<sub>X</sub>(τ) = E[X(t)X(t − τ)]: the correlation of a signal with a delayed copy of <i>itself</i> ("auto" as in autobiography). It is the average of the product of the two samples.</p>
+      ${callout('Lecture plots', '<b>Slowly fluctuating process:</b> R(τ) is wide — nearby samples stay correlated, and the correlation fades only at large lags. <b>Rapidly fluctuating process</b> (like noise): R(τ) drops almost immediately away from τ = 0. Near 0 = uncorrelated; near 1 = highly correlated; negative = correlated in the opposite direction.')}
+      <p>For a real WSS process:</p>
+      <ol><li>R<sub>X</sub>(0) = E[X²] = average power (voltage squared with a normalised 1 Ω resistance, then averaged).</li><li>Even: R<sub>X</sub>(−τ) = R<sub>X</sub>(τ) — the left side mirrors the right.</li><li>Maximum at 0: R<sub>X</sub>(0) ≥ |R<sub>X</sub>(τ)| — a signal matches itself best with no delay (in magnitude; R can be negative elsewhere).</li></ol>
+      <p><b>PSD</b> (W/Hz): how the power is distributed across frequency. For a <i>deterministic</i> signal it is just the Fourier transform of the signal. Our signals are <i>random</i> (the data and the noise are random), so we use <b>Wiener–Khintchine</b>: the PSD is the Fourier transform of the <b>autocorrelation</b>, S<sub>X</sub>(f) = ∫R<sub>X</sub>(τ)e<sup>−j2πfτ</sup>dτ.</p>
+      <p>PSD properties: area under S<sub>X</sub>(f) = E[X²] (W/Hz × Hz = W, the power); S<sub>X</sub>(f) ≥ 0; even in f; and through a filter: <b>S<sub>Y</sub>(f) = |H(f)|² S<sub>X</sub>(f)</b> — squared because the PSD comes from the autocorrelation, which is already a product of two samples.</p>
       ${use(['T3-05'])}`
     },
     {
       h: '7. White noise PSD and filtered noise',
       html: `
       ${mb('R<sub>W</sub>(τ) = ' + frac('N<sub>0</sub>', '2') + 'δ(τ) &nbsp;⇔&nbsp; S<sub>W</sub>(f) = ' + frac('N<sub>0</sub>', '2') + ' W/Hz (two-sided)')}
-      <p>An impulse autocorrelation means any two different instants are uncorrelated. For thermal noise <b>N<sub>0</sub> = kT<sub>e</sub></b>.</p>
-      <p>Through a filter h(t) the noise becomes band-limited:</p>
+      <p>Noise fluctuates so fast that samples at different times are uncorrelated: the autocorrelation is an impulse — non-zero <b>only at zero lag</b>. The Fourier transform of δ(τ) is 1, so the PSD is the constant N<sub>0</sub>/2 at <b>every</b> frequency: white noise can never be avoided, it is present across the whole spectrum. N<sub>0</sub>/2 is the noise power (variance) level.</p>
+      ${mb('N<sub>0</sub> = kT, &nbsp; k = 1.380649 × 10<sup>−23</sup> J/K, &nbsp; T (K) = T(°C) + 273.15')}
+      ${callout('Calculator tip from lecture', 'Boltzmann\'s constant and 273.15 are stored as built-in constants in the scientific calculator (the lecturer used constant 25 for k and constant 38 for 273.15 on theirs — check your own model). Always convert °C to kelvin first.')}
+      <p>Through a filter h(t) the noise becomes <b>band-limited noise</b> — still noise, but only inside the filter's band:</p>
       ${mb('S(f) = ' + frac('N<sub>0</sub>', '2') + '|H(f)|², &nbsp; P<sub>N</sub> = ' + frac('N<sub>0</sub>', '2') + '∫|H(f)|²df = ' + frac('N<sub>0</sub>', '2') + '∫|h(τ)|²dτ (Parseval)')}
+      <p>A brick-wall filter over ±W leaves a flat N<sub>0</sub>/2 between −W and W and nothing outside; a full-raised-cosine filter gives a raised-cosine-shaped noise PSD.</p>
       ${qa('Ideal LPF of bandwidth B, gain 1. Noise power?', '(N<sub>0</sub>/2)·2B = N<sub>0</sub>B.')}
-      ${use(['T3-03', 'T3-07'])}`
+      ${callout('AWGN, explained', '<b>Additive</b> — it adds to the signal (and Gaussian + constant is still Gaussian). <b>White</b> — all frequency components present equally. <b>Gaussian</b> — zero-mean, Gaussian-distributed amplitude (by the CLT).')}
+      ${use(['T3-03', 'T3-07', 'T3-10'])}`
     }
   ]
 },
@@ -212,11 +226,16 @@ var CONCEPTS = [
     {
       h: '1. Setting up the optimal receiver',
       html: `
-      <p>Now assume a wideband channel (no ISI) with white noise: x(t) = s(t) + n(t), s(t) = a<sub>0</sub>g(t). The receive filter is renamed h(t); its output is sampled once at t = T (end of the symbol).</p>
-      ${mb('y(T) = a<sub>0</sub>∫g(T − τ)h(τ)dτ + ∫n(T − τ)h(τ)dτ')}
-      <p>Goal: choose h to <b>maximise SNR</b> at the sampling instant.</p>
-      ${mb('SNR = ' + frac('P<sub>d</sub>(∫g(T − τ)h(τ)dτ)²', '(N<sub>0</sub>/2)∫|h(τ)|²dτ'))}
-      <p>P<sub>d</sub> = E[a<sub>0</sub>²] is the data-symbol power (random part); the integral is deterministic.</p>`
+      <p>Now assume a <b>wideband LTI channel</b>: it only adds noise and does not reshape the signal, x(t) = s(t) + n(t), with s(t) = a<sub>0</sub>g(t) (a<sub>0</sub> = symbol such as ±A, g = transmit pulse). The receive filter is renamed from q(t) to <b>h(t)</b> (books switch notation); its output is sampled once at t = T.</p>
+      <p>Passing through the filter is a convolution, and it distributes over the sum — <i>even the noise gets convolved</i>:</p>
+      ${mb('y(t) = [s(t) + n(t)] ∗ h(t) = a<sub>0</sub>g(t) ∗ h(t) + n(t) ∗ h(t)')}
+      ${mb('y(T) = a<sub>0</sub>∫g(T − τ)h(τ)dτ (signal) + ∫n(T − τ)h(τ)dτ (band-limited noise)')}
+      <p>The receiver is <b>optimal</b> when SNR is highest: signal component large, noise component small.</p>
+      <p><b>Signal power</b> = mean-square value of the signal component. E[a<sub>0</sub>²] is random (depends on the data) and becomes P<sub>d</sub>; the convolution of the two filters is deterministic, so its expectation is just itself:</p>
+      ${mb('P<sub>S</sub> = P<sub>d</sub>(∫g(T − τ)h(τ)dτ)²')}
+      <p><b>Noise power</b>: the noise is WSS, so its power = area under its PSD (N<sub>0</sub>/2)|H(f)|², and by Parseval:</p>
+      ${mb('P<sub>N</sub> = ' + frac('N<sub>0</sub>', '2') + '∫|h(τ)|²dτ')}
+      ${mb('SNR = ' + frac('P<sub>d</sub>(∫g(T − τ)h(τ)dτ)²', '(N<sub>0</sub>/2)∫|h(τ)|²dτ'))}`
     },
     {
       h: '2. Cauchy–Schwarz ⇒ the matched filter',
@@ -225,7 +244,8 @@ var CONCEPTS = [
       ${mb('SNR ≤ ' + frac('2P<sub>d</sub>', 'N<sub>0</sub>') + '∫|g(T − τ)|²dτ = ' + frac('2E', 'N<sub>0</sub>') + 'P<sub>d</sub>')}
       <p>Equality — the maximum — when</p>
       ${mb('h<sub>opt</sub>(t) = k g(T − t)')}
-      <p>The filter is a <b>time-reversed, delayed copy of the transmit pulse</b>: it is "matched" to g.</p>
+      <p>After Cauchy–Schwarz the ∫|h|² terms on top and bottom cancel. The filter is a <b>time-reversed, delayed copy of the transmit pulse</b> — same shape, any amplitude k: it is "matched" to g.</p>
+      ${callout('Fold, then shift', 'g(−t) is g <b>folded</b> about t = 0 (it now lives on −T…0). g(T − t) = g(−(t − T)) is that fold <b>shifted right by T</b>, back onto 0…T. The pulse energy is unchanged by folding or shifting.')}
       <ol>
         <li>The maximum SNR depends only on the pulse <b>energy</b> E, not its shape.</li>
         <li>The filter design does depend on the shape.</li>
@@ -238,6 +258,7 @@ var CONCEPTS = [
       h: '3. The output peaks at t = T, and the peak is E',
       html: `
       <p>Without noise, y(t) = g(t) ∗ g(T − t) is the autocorrelation of g centred on t = T. Its maximum is at t = T and equals ∫g² = E. That is why the switch samples at t = T.</p>
+      ${callout('As done in lecture: convolution case by case (rectangle A on 0…T)', 'Slide the folded signal across the filter and integrate the product over the overlap only:<br>• <b>t &lt; 0</b>: no overlap ⇒ y = 0 (the signal has not entered the filter).<br>• <b>0 ≤ t ≤ T</b>: overlap 0…t ⇒ y = ∫<sub>0</sub><sup>t</sup>A²dτ = A²t (rising line).<br>• <b>T ≤ t ≤ 2T</b>: overlap t − T…T ⇒ y = ∫<sub>t−T</sub><sup>T</sup>A²dτ = A²(2T − t) (falling line).<br>• <b>t &gt; 2T</b>: the signal has fully left ⇒ y = 0.<br>Peak A²T at t = T, where the overlap is complete. (The lecturer corrected the integration limits of the third case in class: lower t − T, upper T. Use a different dummy variable τ inside the integral from the limit t.)')}
       ${callout('Error probability link', 'For polar ±g: y(T) = ±E + noise with variance (N<sub>0</sub>/2)E, so P<sub>e</sub> = Q(√(2E/N<sub>0</sub>)) = Q(√SNR<sub>max</sub>).')}
       ${use(['T4-07'])}`
     },
@@ -252,9 +273,11 @@ var CONCEPTS = [
         <li><b>Slope of the sides</b> = sensitivity to timing error.</li>
         <li><b>Spread of the zero crossings</b> = timing jitter.</li>
       </ul>
+      <p><b>Purpose:</b> it shows at a glance how badly the signal is distorted. The best time to sample is usually the <b>middle</b> of the symbol, where the eye is widest and the noise margin is largest; distortion at that instant shrinks the margin. The slope of the sides also tells you whether you are sampling <b>early or late</b>. Ideally all zero crossings meet at one point; channel distortion or noise spreads them.</p>
       <p>Noise makes the traces fuzzy; ISI splits them into separate paths. M-level signals give M − 1 eyes stacked vertically, with decision boundaries half-way between levels.</p>
-      ${callout('Receive filter bandwidth', 'Too narrow ⇒ ISI (eye closes from inside). Too wide ⇒ more noise passes (eye gets fuzzy).')}
-      ${use(['T4-06'])}`
+      ${callout('Lecture example: 4-level PAM', 'Levels +3, +1, −1, −3. Every possible transition between levels is overlaid, giving 3 eyes. Sample at the middle of the eye and compare with the boundaries <b>+2, 0, −2</b>.')}
+      ${callout('With vs without bandwidth limitation', 'Without a bandwidth limit (filter much wider than the signal) the eyes are clean and wide open. With a bandwidth limit the eyes are less open ⇒ more chance of misdetection. Every real system is band-limited, so the receive filter bandwidth matters: <b>too narrow ⇒ ISI</b> (some traces leave the usual paths, more timing-sensitive, can\'t sample near the zero crossings); <b>too wide ⇒ more noise</b> (the opening shrinks).')}
+      ${use(['T4-06', 'T4-08'])}`
     }
   ]
 }

@@ -63,6 +63,19 @@ PROBLEMS.push({
   ])
 });
 
+PROBLEMS.push({
+  id: 'T1-05', lec: 'T1', kind: 'solve',
+  title: 'Essay: what is ISI and why does it appear in baseband PAM?',
+  q: `<p>Explain (in 5–8 sentences, as for an essay question) where intersymbol interference comes from in a baseband PAM system, how it shows up in the sampled output, and what the two goals of the pulse-shaping problem are.</p>`,
+  a: steps([
+    '<b>Chain:</b> bits b<sub>k</sub> are level-encoded into a<sub>k</sub> (e.g. PNRZ ±A), shaped by the transmit filter g(t), filtered by the channel h(t) and the receive filter q(t), then sampled every T<sub>b</sub> and thresholded.',
+    '<b>Cause:</b> every block is a filter, so each symbol’s pulse is convolved three times. With limited bandwidth the overall pulse p(t) = g ∗ h ∗ q spreads beyond its own bit period.',
+    '<b>Effect:</b> sampling at t = iT<sub>b</sub> gives y(iT<sub>b</sub>) = a<sub>i</sub>p(0) + Σ<sub>k≠i</sub>a<sub>k</sub>p((i − k)T<sub>b</sub>). The first term is the desired symbol; the sum — the tails of the neighbouring symbols, before and after — is the ISI.',
+    '<b>Why it matters:</b> ISI pushes samples towards (or across) the threshold, shrinking the noise margin and causing errors even without noise.',
+    '<b>Pulse-shaping problem:</b> given the channel H(f), choose G(f) and Q(f) so that (1) ISI is reduced to zero and (2) the transmission bandwidth is conserved. The Nyquist criterion answers it.'
+  ])
+});
+
 /* ================= T2 · Nyquist channel & raised cosine ================= */
 PROBLEMS.push({
   id: 'T2-01', lec: 'T2', kind: 'solve',
@@ -167,6 +180,19 @@ PROBLEMS.push({
   ])
 });
 
+PROBLEMS.push({
+  id: 'T2-08', lec: 'T2', kind: 'solve',
+  title: 'Essay: why is the Nyquist channel impractical, and how does the raised cosine fix it?',
+  q: `<p>Explain why the ideal Nyquist channel is the optimum answer to the pulse-shaping problem yet cannot be built, and how the raised-cosine spectrum solves both of its difficulties. State the trade-off controlled by α.</p>`,
+  a: steps([
+    '<b>Why optimum:</b> its brick-wall spectrum P(f) = √E/(2W) for |f| < W satisfies the Nyquist criterion with the minimum possible bandwidth W = R<sub>b</sub>/2. In time it is a sinc that crosses zero at every multiple of T<sub>b</sub>, so overlapping pulses do not interfere at the sampling instants.',
+    '<b>Difficulty 1 — unrealizable:</b> the spectrum must be perfectly flat up to ±W and then drop to zero instantly; no physical filter has such an abrupt roll-off.',
+    '<b>Difficulty 2 — slow decay:</b> the sinc tails fall only as 1/|t|. A small timing error means the many tails no longer hit zero and add up to large ISI.',
+    '<b>Raised-cosine fix:</b> keep a flat part up to f<sub>1</sub>, then roll off gradually with a (1 + cos) shape that is symmetric about W, so the shifted replicas still add up flat (zero ISI). In time, p(t) = √E sinc(2Wt)·cos(2παWt)/(1 − 16α²W²t²): the sinc keeps the zero crossings, the extra factor kills the tails quickly.',
+    '<b>Trade-off:</b> α = 1 − f<sub>1</sub>/W. Larger α ⇒ easier filter and faster decay (robust to timing error) but more bandwidth, B<sub>T</sub> = W(1 + α). α = 0 is the brick wall; α = 1 doubles the bandwidth; practical systems use 0 < α < 1 (e.g. α = 0.3 for 30 % excess bandwidth).'
+  ])
+});
+
 /* ================= T3 · Noise, Gaussian RVs & random processes ================= */
 PROBLEMS.push({
   id: 'T3-01', lec: 'T3', kind: 'solve',
@@ -255,6 +281,44 @@ PROBLEMS.push({
   ])
 });
 
+PROBLEMS.push({
+  id: 'T3-08', lec: 'T3', kind: 'solve',
+  title: 'Essay: why is channel noise modelled as a WSS Gaussian random process (AWGN)?',
+  q: `<p>Explain, using the central limit theorem and the idea of a random process, why thermal channel noise is modelled as additive white Gaussian noise. Explain each of the three words.</p>`,
+  a: steps([
+    '<b>Random process:</b> each electron’s random motion in the circuit is like a random variable; the noise is the ensemble of a huge number of them evolving over time — a random process.',
+    '<b>Gaussian (CLT):</b> the electron contributions are independent and identically distributed. The CLT says the normalised sum of many i.i.d. random variables approaches N(0, 1) regardless of their individual distribution, so the noise amplitude is Gaussian with zero mean.',
+    '<b>Stationary (WSS):</b> its statistics are the same in every time interval — the mean and variance are constant and the autocorrelation depends only on the lag — so it is wide-sense stationary.',
+    '<b>White:</b> it fluctuates so fast that samples at different times are uncorrelated: R<sub>W</sub>(τ) = (N<sub>0</sub>/2)δ(τ). Its Fourier transform, the PSD, is flat N<sub>0</sub>/2 — all frequency components present equally, like white light.',
+    '<b>Additive:</b> it simply adds to the signal, x(t) = s(t) + n(t); a Gaussian plus a constant is still Gaussian, so the received sample is Gaussian around the transmitted level.'
+  ])
+});
+
+PROBLEMS.push({
+  id: 'T3-09', lec: 'T3', kind: 'solve',
+  title: 'Stationary or not? Which order? (lecture examples)',
+  q: `<p>(a) Classify as stationary or non-stationary and justify: (i) thermal noise in a receiver, (ii) the daily outdoor temperature over a year. (b) A process has a mean and variance that never change, and the correlation between X(2 s) and X(5 s) equals that between X(10 s) and X(13 s). What kind of stationarity does this show? (c) Why do we usually settle for WSS instead of SSS?</p>`,
+  a: steps([
+    '(a)(i) <b>Stationary</b>: cut it into intervals and the mean, standard deviation, etc. are the same in each.',
+    '(a)(ii) <b>Non-stationary</b>: temperature fluctuates daily, but its statistics drift from one interval (season) to another.',
+    '(b) Constant mean and variance ⇒ <b>1st-order</b> stationarity (single-point statistics). Both pairs have the same lag τ = 3 s and the same correlation ⇒ two-point statistics depend only on τ ⇒ <b>2nd-order</b>. Together: <b>wide-sense stationary (WSS)</b>.',
+    '(c) Strict-sense stationarity requires every order k to be invariant to every time shift — mathematically complex to show. WSS (1st and 2nd order only) is sufficient for the noise and SNR computations we do.'
+  ])
+});
+
+PROBLEMS.push({
+  id: 'T3-10', lec: 'T3', kind: 'solve',
+  title: 'Thermal noise at room temperature (°C → K)',
+  q: `<p>A receiver operates at 27 °C. (a) Find N<sub>0</sub> and the two-sided PSD of the thermal noise. (b) The noise passes through a brick-wall filter of bandwidth W = 10 kHz (|H| = 1 for |f| < W). Find the output noise power in watts and dBm.</p>`,
+  a: steps([
+    'Convert first: T = 27 + 273.15 = <b>300.15 K</b>.',
+    'N<sub>0</sub> = kT = 1.380649×10<sup>−23</sup> × 300.15 = <b>4.144 × 10<sup>−21</sup> W/Hz</b>; two-sided PSD N<sub>0</sub>/2 = <b>2.072 × 10<sup>−21</sup> W/Hz</b>.',
+    'Band-limited: flat N<sub>0</sub>/2 only for −W < f < W. Power = area = (N<sub>0</sub>/2)(2W) = N<sub>0</sub>W = 4.144×10<sup>−21</sup> × 10<sup>4</sup> = <b>4.144 × 10<sup>−17</sup> W</b>.',
+    'dBm: 10 log(4.144×10<sup>−17</sup>/10<sup>−3</sup>) = <b>−133.8 dBm</b>.',
+    warn('Forgetting the +273.15 (using T = 27) gives an answer 11 times too small.')
+  ])
+});
+
 /* ================= T4 · Matched filter & eye pattern ================= */
 PROBLEMS.push({
   id: 'T4-01', lec: 'T4', kind: 'solve',
@@ -262,7 +326,14 @@ PROBLEMS.push({
   q: `<p>g(t) = A for 0 ≤ t ≤ T, 0 elsewhere. (a) Sketch the impulse response of the matched filter. (b) Find and plot the matched-filter output y(t) (no noise). (c) Find its peak value.</p>`,
   a: steps([
     'h<sub>opt</sub>(t) = g(T − t) (take k = 1): flip g in time and shift by T. A rectangle flipped about T/2 is the same rectangle: h(t) = A for 0 ≤ t ≤ T.',
-    'y(t) = g(t) ∗ h(t). Slide the two rectangles past each other: the overlap grows linearly, then shrinks: ' + mb('y(t) = A²t for 0 < t ≤ T; &nbsp; y(t) = A²(2T − t) for T < t ≤ 2T; &nbsp; 0 elsewhere'),
+    'y(t) = g(t) ∗ h(t) = ∫g(τ)h(t − τ)dτ. As in lecture, fold one rectangle and slide it across the other, integrating the product (A·A = A²) only over the overlap: ' +
+      tbl(['case', 'overlap', 'y(t)'], [
+        ['t < 0', 'none — signal has not entered the filter', '0'],
+        ['0 ≤ t ≤ T', '0 … t', '∫<sub>0</sub><sup>t</sup>A²dτ = A²t (rising)'],
+        ['T ≤ t ≤ 2T', 't − T … T', '∫<sub>t−T</sub><sup>T</sup>A²dτ = A²(2T − t) (falling)'],
+        ['t > 2T', 'none — signal has left', '0']
+      ], 2),
+    warn('Use τ as the integration variable and keep t for the limits. In the third case the limits are t − T (lower) and T (upper) — the lecturer corrected this on the board.'),
     curveFig({ series: [{ fn: function (t) { return t < 0 || t > 2 ? 0 : t <= 1 ? t : 2 - t; } }], xlo: -0.3, xhi: 2.4, ylo: -0.1, yhi: 1.15, xt: [[1, 'T'], [2, '2T']], yt: [[1, 'A²T']], cap: 'Matched-filter output: a triangle that peaks at t = T.', label: 'triangle output' }),
     '(c) Peak at t = T: y(T) = <b>A²T</b> = the pulse energy E. That is why we sample at t = T.'
   ])
@@ -274,6 +345,7 @@ PROBLEMS.push({
   q: `<p>g(t) = +A/2 for 0 ≤ t < T/2 and −A/2 for T/2 ≤ t < T. (a) Sketch the matched filter h(t). (b) Find y(t) at t = 0, T/2, T, 3T/2, 2T and sketch it. (c) Peak value?</p>`,
   a: steps([
     'h(t) = g(T − t): flip and shift. The first half of h is the second half of g: h(t) = −A/2 for 0 ≤ t < T/2 and +A/2 for T/2 ≤ t < T.',
+    note('This is the assigned homework: do (b) by convolution like Example 1, but with <b>four</b> overlap cases of width T/2 each (the product changes sign as the halves slide past each other).'),
     'y(t) = g ∗ h is the autocorrelation of g shifted to t = T. Piece by piece (each piece is linear): ' + mb('y(t) = −(A²/4)t, &nbsp; 0 ≤ t ≤ T/2<br>y(t) = (A²/4)(3t − 2T), &nbsp; T/2 ≤ t ≤ T<br>y(t) = (A²/4)(4T − 3t), &nbsp; T ≤ t ≤ 3T/2<br>y(t) = −(A²/4)(2T − t), &nbsp; 3T/2 ≤ t ≤ 2T'),
     tbl(['t', '0', 'T/2', 'T', '3T/2', '2T'], [['y(t)', '0', '−A²T/8', '<b>A²T/4</b>', '−A²T/8', '0']]),
     curveFig({ series: [{ fn: function (t) { if (t < 0 || t > 2) return 0; if (t <= 0.5) return -t; if (t <= 1) return 3 * t - 2; if (t <= 1.5) return 4 - 3 * t; return -(2 - t); } }], xlo: -0.3, xhi: 2.4, ylo: -0.7, yhi: 1.15, xt: [[0.5, 'T/2'], [1, 'T'], [1.5, '3T/2'], [2, '2T']], yt: [[1, 'A²T/4'], [-0.5, '−A²T/8']], cap: 'Matched-filter output for the split pulse (vertical axis in units of A²T/4).', label: 'split pulse output' }),
@@ -341,5 +413,17 @@ PROBLEMS.push({
     '<b>Power.</b> P<sub>r</sub> = E·R<sub>b</sub> = 3.64×10<sup>−20</sup> × 10<sup>6</sup> = <b>3.64×10<sup>−14</sup> W = −104.4 dBm</b>.',
     '<b>Bandwidth.</b> B<sub>T</sub> = (R<sub>b</sub>/2)(1 + α) = 0.5 MHz × 1.35 = <b>675 kHz</b>.',
     '<b>Trade-offs.</b> Every 10× in R<sub>b</sub> costs +10 dB in power for the same P<sub>e</sub>; a real receiver adds a noise figure and implementation loss on top of this ideal number.'
+  ])
+});
+
+PROBLEMS.push({
+  id: 'T4-08', lec: 'T4', kind: 'solve',
+  title: 'Essay: eye patterns with and without bandwidth limitation',
+  q: `<p>(a) Explain how an eye pattern is produced and what it is used for. (b) Compare the eye of a signal with no bandwidth limitation and one through a band-limited receive filter. (c) Explain why the receive filter bandwidth must be neither too low nor too high, and what each problem looks like on the eye. (d) For 4-level PAM (levels ±1, ±3), where do you sample and what do you compare with?</p>`,
+  a: steps([
+    '(a) Take the receive-filter output before thresholding and superimpose successive symbol intervals (like an oscilloscope triggered every symbol). Because each interval is distorted differently by the channel and noise, the traces form an "eye". It shows how badly the signal is distorted and where to sample: at the widest opening (largest noise margin), usually the middle. The slope of the sides shows sensitivity to timing error (sampling early or late); the spread of the zero crossings shows timing distortion.',
+    '(b) No bandwidth limit (filter much wider than the signal): clean, wide-open eyes. Band-limited: the eyes are less open, so samples are more likely to be misdetected. All real systems are band-limited.',
+    '(c) <b>Too low a bandwidth ⇒ ISI</b>: some traces leave their usual paths, the eye closes and becomes more timing-sensitive — you cannot sample near the zero crossings. <b>Too high a bandwidth ⇒ more noise</b> passes, the traces get fuzzy and the opening shrinks. The filter must balance the two.',
+    '(d) There are 3 eyes. Sample at the middle of the eye (the decision time) and compare with the decision boundaries <b>+2, 0, −2</b>, half-way between levels.'
   ])
 });

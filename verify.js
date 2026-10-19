@@ -83,6 +83,11 @@ check('T3-05 c', Math.exp(-1), 0.3679, 1e-3);
 check('T3-06', [12 * 0.5, 12 / 12, Q(1.5)], [6, 1, 0.0668], 1e-3);
 // ---- T3-07
 check('T3-07', 1e-6 * 4 * 10000, 0.04);
+// ---- T3-10 thermal noise at 27 °C, brick wall W = 10 kHz
+{ const T = 27 + 273.15, N0 = k_B * T; check('T3-10 T', T, 300.15); check('T3-10 N0', [N0, N0 / 2], [4.144e-21, 2.072e-21], 1e-3);
+  check('T3-10 P', N0 * 1e4, 4.144e-17, 1e-3); check('T3-10 dBm', dBm(N0 * 1e4), -133.8, 1e-3); check('T3-10 trap', T / 27, 11.1, 1e-2); }
+// ---- T4-08 4-PAM boundaries half-way between levels
+check('T4-08', [(-3 + -1) / 2, (-1 + 1) / 2, (1 + 3) / 2], [-2, 0, 2]);
 // ---- T4-01 rect matched filter (A = 2, T = 1)
 { const A = 2, g = t => (t >= 0 && t <= 1) ? A : 0, h = t => g(1 - t);
   check('T4-01', [1, 0.5, 1.5].map(t => convAt(g, h, t, 0, 1)), [A * A, A * A / 2, A * A / 2], 1e-3); }

@@ -9,14 +9,14 @@ A problem-focused reviewer for **Digital Communications — Module 2**, built li
 | T3 · Noise & random processes | AWGN, Gaussian RV properties, CDF/PDF, Q-function, CLT, stationarity, autocorrelation, PSD |
 | T4 · Matched filter & eye pattern | Optimal receiver, h = g(T − t), SNR = 2E/N<sub>0</sub>, eye diagram reading |
 
-Part 1 (M2-1, Baseband Pulse Transmission) is in; Part 2 (equalization & synchronization) comes next.
+Part 1 (M2-1, Baseband Pulse Transmission) is complete (slides + all lecture videos); Part 2 (equalization & synchronization) comes next.
 
 ## What's inside
 
 - **Study Plan** — sessions in topic order; tick tasks off, links jump to the concept section or problem.
 - **Concepts** — plain-language explanation of every idea, a tiny hand-checkable example each, self-check questions.
-- **Sample Problems** (25) — worked solutions in steps. Self-grade each with *Got it* / *Missed*.
-- **Identification** (73 terms) — searchable glossary with a *Quiz me* mode (definitions hidden until tapped) and shuffle, for the ID part of the exam.
+- **Sample Problems** (31, including essay-style “explain” questions) — worked solutions in steps. Self-grade each with *Got it* / *Missed*.
+- **Identification** (81 terms) — searchable glossary with a *Quiz me* mode (definitions hidden until tapped) and shuffle, for the ID part of the exam.
 - **Drill** — random problem from a pool you pick, with a timer.
 - **Recipes**, **Formula Sheet** and **Cheat List**.
 
