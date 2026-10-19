@@ -2,9 +2,12 @@
 function P() { return Array.prototype.map.call(arguments, function (i) { return '<a data-goto="' + i + '">' + i + '</a>'; }).join(', '); }
 function C(t, a, b) { return '<a data-concept="' + (t - 1) + ':' + (a - 1) + '">Topic ' + t + ' Concepts §' + a + (b && b !== a ? '–' + b : '') + '</a>'; }
 
+/* N(part, fromSection[, toSection]) links to the Lecture Notes tab (part 1 = M2-1, part 2 = M2-2). */
+function N(part, a, b) { return '<a data-notes="' + (part - 1) + ':' + (a - 1) + '">' + (part === 1 ? 'M2-1' : 'M2-2') + ' Lecture Notes §' + a + (b && b !== a ? '–' + b : '') + '</a>'; }
+
 var PLAN = {
   loop: [
-    '<b>Read</b> the concept section slowly. Open every <i>? check yourself</i> box and answer it first.',
+    '<b>Read</b> the Lecture Notes section first, then the short Concepts summary. Open every <i>? check yourself</i> box and answer it first.',
     '<b>Try</b> the matching problem for at least 5 minutes <i>before</i> opening the solution.',
     '<b>Compare:</b> show the solution and follow it step by step against the recipe.',
     '<b>Redo:</b> hide the solution and solve the same problem again from a blank page.',
@@ -25,6 +28,7 @@ var PLAN = {
     {
       day: 'Session 1', focus: 'T1 · Baseband PAM and ISI',
       tasks: [
+        ['<b>Read first:</b> ' + N(1, 1, 6) + ' (what changes in Module 2, the PAM chain, convolution, ISI). Read slowly; check every <i>where</i> list.', '35m'],
         ['Read ' + C(1, 1, 2) + ': the block diagram and why three convolutions become one p(t).', '20m'],
         ['Solve ' + P('T1-01') + ' (PNRZ and s(t)).', '15m'],
         ['Read ' + C(1, 3, 4) + ' (ISI, the pulse-shaping problem).', '15m'],
@@ -36,6 +40,7 @@ var PLAN = {
     {
       day: 'Session 2', focus: 'T2 · Nyquist channel and raised cosine',
       tasks: [
+        ['<b>Read first:</b> ' + N(1, 7, 12) + ' (Nyquist criterion, brick wall and sinc, raised cosine, bandwidth). Read slowly; check every <i>where</i> list.', '40m'],
         ['Read ' + C(2, 1, 4) + ': zero-ISI condition, Nyquist criterion, brick wall ↔ sinc, why it is impractical.', '30m'],
         ['Solve ' + P('T2-01') + '.', '10m'],
         ['Read ' + C(2, 5, 6) + ' (raised cosine, α, B<sub>T</sub>).', '25m'],
@@ -48,6 +53,7 @@ var PLAN = {
     {
       day: 'Session 3', focus: 'T3 · Gaussian noise, Q-function, random processes',
       tasks: [
+        ['<b>Read first:</b> ' + N(1, 13, 18) + ' (Gaussian RVs, Q-function, CLT, random processes, autocorrelation, PSD, white noise). Read slowly; check every <i>where</i> list.', '50m'],
         ['Read ' + C(3, 1, 3) + '. Practise reading the Q-table on Q(1), Q(2), Q(2.5).', '30m'],
         ['Solve ' + P('T3-01', 'T3-02', 'T3-04') + '.', '35m'],
         ['Read ' + C(3, 4, 7) + ' (CLT, stationarity, autocorrelation, PSD, white noise).', '35m'],
@@ -59,6 +65,7 @@ var PLAN = {
     {
       day: 'Session 4', focus: 'T4 · Matched filter and eye pattern',
       tasks: [
+        ['<b>Read first:</b> ' + N(1, 19, 22) + ' (optimal receiver, Cauchy–Schwarz, matched filter worked by convolution, eye pattern). Read slowly; check every <i>where</i> list.', '35m'],
         ['Read ' + C(4, 1, 3) + '. Re-derive SNR ≤ 2E·P<sub>d</sub>/N<sub>0</sub> on paper once.', '30m'],
         ['Solve the slide examples ' + P('T4-01', 'T4-02') + ' with <b>Recipes → Matched-filter output</b>.', '35m'],
         ['Solve ' + P('T4-03', 'T4-04', 'T4-05') + '.', '30m'],
@@ -70,6 +77,7 @@ var PLAN = {
     {
       day: 'Session 5', focus: 'T5 · Channel models and equalizers (M2-2)',
       tasks: [
+        ['<b>Read first:</b> ' + N(2, 1, 8) + ' (channel models, why equalize, transversal filter, zero forcing, MSE, DFE). Read slowly; check every <i>where</i> list.', '50m'],
         ['Read ' + C(5, 1, 3) + ': channel models (cave analogy), why equalize, where the equalizer goes, the tapped delay line.', '30m'],
         ['Solve ' + P('T5-01', 'T5-02') + '.', '20m'],
         ['Read ' + C(5, 4) + ' (peak distortion → zero forcing). Then solve ' + P('T5-03', 'T5-04', 'T5-05', 'T5-06') + ' with <b>Recipes → 3-tap zero-forcing design</b>.', '60m'],
@@ -81,6 +89,7 @@ var PLAN = {
     {
       day: 'Session 6', focus: 'T6 · Carrier and symbol-timing synchronization (M2-2)',
       tasks: [
+        ['<b>Read first:</b> ' + N(2, 9, 13) + ' (carrier sync, phase error, PLL, symbol timing, early/late). Read slowly; check every <i>where</i> list.', '35m'],
         ['Read ' + C(6, 1, 4) + ': pilot vs suppressed carrier, why the phase matters, PLL vs one-shot.', '30m'],
         ['Solve ' + P('T6-01', 'T6-02') + '.', '25m'],
         ['Read ' + C(6, 5, 6) + ': timing recovery vs timing phase, early/late, decision-directed vs non-decision-directed.', '25m'],

@@ -18,7 +18,8 @@ Both parts are in: M2-1 Baseband Pulse Transmission (T1–T4) and M2-2 Equalizat
 ## What's inside
 
 - **Study Plan** — sessions in topic order; tick tasks off, links jump to the concept section or problem.
-- **Concepts** — plain-language explanation of every idea, a tiny hand-checkable example each, self-check questions.
+- **Lecture Notes** — the lectures rewritten as readable notes in teaching order (from the slides and lecture recordings): what each idea means, why it is done that way, the lecturer’s examples and analogies, and the derivations done in class. Read this first.
+- **Concepts** — the short version of each topic, with self-check questions.
 - **Sample Problems** (45, including essay-style “explain” questions) — worked solutions in steps. Self-grade each with *Got it* / *Missed*.
 - **Identification** (135 terms) — searchable glossary with a *Quiz me* mode (definitions hidden until tapped) and shuffle, for the ID part of the exam.
 - **Drill** — random problem from a pool you pick, with a timer.
@@ -51,7 +52,8 @@ data/topics.js     Module 2 topic list (drives filters, headings, drill)
 data/problems.js   sample problems, M2-1 (T1–T4)
 data/problems-m22.js  sample problems, M2-2 (T5–T6)
 data/glossary.js   identification terms (M2-1); glossary-m22.js for M2-2
-data/concepts.js   concept notes (M2-1); concepts-m22.js for M2-2
+data/notes.js      lecture notes (M2-1); notes-m22.js for M2-2
+data/concepts.js   concept summaries (M2-1); concepts-m22.js for M2-2
 data/plan.js       study plan
 data/reference.js  recipes, formula sheet, cheat list (M2-1); reference-m22.js for M2-2
 verify.js          numerical + data-integrity checks

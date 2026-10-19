@@ -7,6 +7,10 @@ The user chats with Claude about this repo to add problems, fix answers, and dri
 - Each module part has its own data files: M2-1 → `problems.js`, `glossary.js`, `concepts.js`, `reference.js`; M2-2 →
   `problems-m22.js`, `glossary-m22.js`, `concepts-m22.js`, `reference-m22.js` (they `push` onto the same globals). New files must be
   added to the `<script>` list in `index.html` **and** the load list in `verify.js`.
+- **Lecture Notes tab** (`data/notes.js`, `notes-m22.js`, `NOTES = [{label, intro, sections}]`) is the main reading: narrative,
+  lecture-order rewrite of slides + transcripts, like the Module 1 drill’s Lecture Notes (the user found formula-first notes hard
+  to understand). Explain what/why in words first, use the lecturer’s analogies and in-class corrections, then the formula with a
+  `where()` list. Concepts is the short summary. Plan sessions start with `N(part, from, to)` links to the notes.
 - Topics live in `data/topics.js` (`TOPICS = { T1: 'T1 · …', … }`). Filters, list headings and drill checkboxes are built from it — no topic ids are hard-coded in `app.js`.
 - **Focus: sample problems + identification. No design-problem section** (user preference for DigiComm — exam is computation + ID).
 - Problems: `PROBLEMS.push({id, lec, kind: 'solve', title, q, a})` in `data/problems.js`.

@@ -176,7 +176,13 @@ ul.tasklist li.done{background:var(--accent-soft); border-color:var(--accent);}
 ul.tasklist li.done .tasktext{text-decoration:line-through; color:var(--muted);}
 ul.tasklist input[type=checkbox]{margin-top:3px; width:17px; height:17px; accent-color:var(--accent); flex:none;}
 .tasktext{font-size:.92rem; line-height:1.5;}
-.tasktext a,.note-sec a[data-concept],.note-sec a[data-goto]{color:var(--accent); font-weight:600; cursor:pointer; text-decoration:underline;}
+.toc ol{margin:6px 0 0 1.2em; padding:0; columns:2; column-gap:28px;}
+.toc li{font-size:.86rem; margin-bottom:4px; break-inside:avoid;}
+.toc a{color:var(--accent); cursor:pointer; text-decoration:none;}
+.toc a:hover{text-decoration:underline;}
+@media (max-width:560px){.toc ol{columns:1;}}
+.note-sec h4{font-size:.9rem; color:var(--accent); margin:16px 0 6px; font-family:"IBM Plex Mono",monospace; letter-spacing:.02em;}
+.tasktext a[data-notes],.note-sec a[data-notes],.tasktext a,.note-sec a[data-concept],.note-sec a[data-goto]{color:var(--accent); font-weight:600; cursor:pointer; text-decoration:underline;}
 .taskmin{font-family:"IBM Plex Mono",monospace; font-size:.68rem; color:var(--muted); white-space:nowrap; margin-left:auto; padding-top:3px;}
 .plan-pill{font-family:"IBM Plex Mono",monospace; font-size:.75rem; color:var(--ink-soft); background:var(--surface-2); border:1px solid var(--line); border-radius:999px; padding:3px 10px; display:inline-block; margin-bottom:12px;}
 /* inline math in prose: same STIX math font as the equation boxes, slightly larger */
@@ -233,6 +239,7 @@ footer.done{text-align:center; color:var(--muted); font-size:.8rem; padding-bloc
   </div>
   <nav class="tabs" id="tabs">
     <button data-pane="plan" class="active">Study Plan</button>
+    <button data-pane="notes">Lecture Notes</button>
     <button data-pane="concepts">Concepts</button>
     <button data-pane="problems">Sample Problems</button>
     <button data-pane="ident">Identification</button>
@@ -251,8 +258,14 @@ footer.done{text-align:center; color:var(--muted); font-size:.8rem; padding-bloc
     <div id="planList"></div>
   </section>
 
+  <section class="pane" id="pane-notes">
+    <div class="exam-note"><b>Read this first.</b> The lectures rewritten as clean notes, in the order they were taught: what each idea means, why it is done that way, the lecturer’s own examples and analogies, and the derivations done in class. Every formula has a <i>where</i> list. Afterwards, use <i>Concepts</i> for the short version and <i>Sample Problems</i> to practise.</div>
+    <div class="subtabs" id="notesTabs"></div>
+    <div id="notesBody"></div>
+  </section>
+
   <section class="pane" id="pane-concepts">
-    <div class="exam-note"><b>Start here.</b> Each topic is explained in plain words: what every property <i>means</i>, a tiny example you can check by hand, and which problems to try next. Open the <i>? check yourself</i> boxes to test what you just read, then go to <i>Sample Problems</i>.</div>
+    <div class="exam-note"><b>The short version.</b> Read the <i>Lecture Notes</i> first; this tab sums up each topic: what every property <i>means</i>, a tiny example you can check by hand, and which problems to try next. Open the <i>? check yourself</i> boxes to test what you just read, then go to <i>Sample Problems</i>.</div>
     <div class="subtabs" id="conceptTabs"></div>
     <div id="conceptBody"></div>
   </section>
@@ -301,6 +314,8 @@ footer.done{text-align:center; color:var(--muted); font-size:.8rem; padding-bloc
 <script src="data/problems-m22.js"></script>
 <script src="data/glossary.js"></script>
 <script src="data/glossary-m22.js"></script>
+<script src="data/notes.js"></script>
+<script src="data/notes-m22.js"></script>
 <script src="data/concepts.js"></script>
 <script src="data/concepts-m22.js"></script>
 <script src="data/plan.js"></script>

@@ -169,22 +169,29 @@ function mathify(html) {
       .replace(/[α-ωϕθλμσδφω]/g, function (c) { return c === 'π' ? c : '<i>' + c + '</i>'; });
   }).join('');
 }
-function renderConcepts() {
-  var tabs = document.getElementById('conceptTabs'), body = document.getElementById('conceptBody'), cur = 0;
-  try { cur = +localStorage.getItem('digicomm-m2-concept-tab') || 0; } catch (e) { }
-  if (cur >= CONCEPTS.length) cur = 0;
-  if (!CONCEPTS.length) { body.innerHTML = '<p class="empty">Concept notes will appear here once the Module 2 material is added.</p>'; return; }
+/* ----- reading tabs (Lecture Notes and Concepts share one renderer) ----- */
+function renderReader(o) {
+  var tabs = document.getElementById(o.tabs), body = document.getElementById(o.body), cur = 0;
+  try { cur = +localStorage.getItem(o.key) || 0; } catch (e) { }
+  if (cur >= o.list.length) cur = 0;
+  if (!o.list.length) { body.innerHTML = '<p class="empty">Nothing here yet.</p>'; return function () { }; }
   function draw() {
-    tabs.innerHTML = CONCEPTS.map(function (c, i) { return '<button type="button" data-i="' + i + '" class="' + (i === cur ? 'active' : '') + '">' + c.label + '</button>'; }).join('');
-    body.innerHTML = CONCEPTS[cur].sections.map(function (s) { return '<div class="card note-sec"><h3>' + s.h + '</h3>' + inlineMath(s.html) + '</div>'; }).join('');
+    tabs.innerHTML = o.list.map(function (c, i) { return '<button type="button" data-i="' + i + '" class="' + (i === cur ? 'active' : '') + '">' + c.label + '</button>'; }).join('');
+    var secs = o.list[cur].sections, toc = o.toc ? '<div class="card note-sec toc"><h3>In this lecture</h3><ol>' + secs.map(function (s, n) { return '<li><a data-sec="' + n + '">' + s.h.replace(/^\d+\.\s*/, '') + '</a></li>'; }).join('') + '</ol></div>' : '';
+    body.innerHTML = (o.list[cur].intro ? '<div class="exam-note">' + o.list[cur].intro + '</div>' : '') + toc + secs.map(function (s) { return '<div class="card note-sec reader-sec"><h3>' + s.h + '</h3>' + inlineMath(s.html) + '</div>'; }).join('');
   }
-  window.openConcept = function (i, s) { cur = i; try { localStorage.setItem('digicomm-m2-concept-tab', cur); } catch (x) { } draw(); showPane('concepts'); var c = body.querySelectorAll('.card')[s]; if (c) c.scrollIntoView({ block: 'start' }); };
-  tabs.addEventListener('click', function (e) { var b = e.target.closest('button[data-i]'); if (!b) return; cur = +b.dataset.i; try { localStorage.setItem('digicomm-m2-concept-tab', cur); } catch (x) { } draw(); window.scrollTo(0, 0); });
+  function open(i, s) { cur = i; try { localStorage.setItem(o.key, cur); } catch (x) { } draw(); showPane(o.pane); var c = body.querySelectorAll('.reader-sec')[s]; if (c) c.scrollIntoView({ block: 'start' }); }
+  tabs.addEventListener('click', function (e) { var b = e.target.closest('button[data-i]'); if (!b) return; cur = +b.dataset.i; try { localStorage.setItem(o.key, cur); } catch (x) { } draw(); window.scrollTo(0, 0); });
+  body.addEventListener('click', function (e) { var a = e.target.closest('a[data-sec]'); if (a) { var c = body.querySelectorAll('.reader-sec')[+a.dataset.sec]; if (c) c.scrollIntoView({ block: 'start' }); } });
   draw();
+  return open;
 }
+function renderConcepts() { window.openConcept = renderReader({ list: CONCEPTS, tabs: 'conceptTabs', body: 'conceptBody', pane: 'concepts', key: 'digicomm-m2-concept-tab' }); }
+function renderNotes() { window.openNotes = renderReader({ list: NOTES, tabs: 'notesTabs', body: 'notesBody', pane: 'notes', key: 'digicomm-m2-notes-tab', toc: true }); }
 document.addEventListener('click', function (e) {
   var a = e.target.closest('a[data-goto]'); if (a) gotoProblem(a.dataset.goto);
   var c = e.target.closest('a[data-concept]'); if (c) { var p = c.dataset.concept.split(':'); window.openConcept(+p[0], +p[1]); }
+  var n = e.target.closest('a[data-notes]'); if (n) { var q = n.dataset.notes.split(':'); window.openNotes(+q[0], +q[1]); }
 });
 var PLAN_KEY = 'digicomm-m2-plan-v1', planState = {};
 try { planState = JSON.parse(localStorage.getItem(PLAN_KEY) || '{}'); } catch (e) { planState = {}; }
@@ -247,5 +254,5 @@ document.getElementById('resetBtn').addEventListener('click', function () {
 });
 
 listP = buildList('Problems', SOLVE);
-renderPlan(); renderConcepts(); buildGlossary(); buildDrill(); renderRecipes(); renderFormulas(); renderCheat(); renderMissed(); updateProgress();
+renderPlan(); renderNotes(); renderConcepts(); buildGlossary(); buildDrill(); renderRecipes(); renderFormulas(); renderCheat(); renderMissed(); updateProgress();
 (function () { var h = (location.hash || '').slice(1); if (h && document.getElementById('pane-' + h)) showPane(h); })();

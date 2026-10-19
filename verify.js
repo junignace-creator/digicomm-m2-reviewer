@@ -156,10 +156,11 @@ check('T6-03 signs', [1 * 1, 1 * -1, -1 * 1, -1 * -1], [1, -1, -1, 1]);
 
 // ---- data integrity: ids unique, topics valid, every link resolves
 const ctx = { console }; vm.createContext(ctx);
-['lib.js', 'data/topics.js', 'data/problems.js', 'data/problems-m22.js', 'data/glossary.js', 'data/glossary-m22.js', 'data/concepts.js', 'data/concepts-m22.js', 'data/plan.js', 'data/reference.js', 'data/reference-m22.js']
+['lib.js', 'data/topics.js', 'data/problems.js', 'data/problems-m22.js', 'data/glossary.js', 'data/glossary-m22.js', 'data/notes.js', 'data/notes-m22.js', 'data/concepts.js', 'data/concepts-m22.js', 'data/plan.js', 'data/reference.js', 'data/reference-m22.js']
   .forEach(f => vm.runInContext(fs.readFileSync(f, 'utf8'), ctx, { filename: f }));
-vm.runInContext('this.__d = { PROBLEMS, TOPICS, CONCEPTS, PLAN, GLOSSARY, FORMULAS }', ctx);
-const { PROBLEMS, TOPICS, CONCEPTS, PLAN, GLOSSARY, FORMULAS } = ctx.__d;
+vm.runInContext('this.__d = { PROBLEMS, TOPICS, CONCEPTS, PLAN, GLOSSARY, FORMULAS, NOTES }', ctx);
+const { PROBLEMS, TOPICS, CONCEPTS, PLAN, GLOSSARY, FORMULAS, NOTES } = ctx.__d;
+NOTES.forEach(c => c.sections.forEach(s => { const mbs = (s.html.match(/class="math-block"/g) || []).length, ws = (s.html.match(/class="where"/g) || []).length; ok(c.label + ' / ' + s.h + ': ' + mbs + ' expressions but ' + ws + ' legends', ws >= mbs); }));
 // every expression in Concepts and every formula needs a variable legend (where())
 CONCEPTS.forEach(c => c.sections.forEach(s => { const mbs = (s.html.match(/class="math-block"/g) || []).length, ws = (s.html.match(/class="where"/g) || []).length; ok(c.label + ' / ' + s.h + ': ' + mbs + ' expressions but ' + ws + ' legends', ws >= mbs); }));
 FORMULAS.forEach(g => g.items.forEach(it => ok('formula without vars: ' + it.name, Array.isArray(it.vars) && it.vars.length > 0)));
@@ -173,7 +174,7 @@ PROBLEMS.forEach(p => {
   ok(p.id + ': leftover ${', !/\$\{/.test(p.q + p.a));
 });
 const allText = v => typeof v === "string" ? v : v && typeof v === "object" ? Object.values(v).map(allText).join(" ") : "";
-for (const m of allText([PROBLEMS, CONCEPTS, PLAN]).matchAll(/data-goto="([^"]+)"/g)) ok("broken problem link " + m[1], ids.has(m[1]));
+for (const m of allText([PROBLEMS, CONCEPTS, PLAN, NOTES]).matchAll(/data-goto="([^"]+)"/g)) ok("broken problem link " + m[1], ids.has(m[1]));
 const planText = allText(PLAN.sessions) + allText(PLAN.quick);
 PROBLEMS.forEach(p => ok(p.id + " is in no study-plan task", !PLAN.sessions.length || planText.includes('"' + p.id + '"')));
 
