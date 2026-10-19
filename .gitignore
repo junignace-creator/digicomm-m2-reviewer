@@ -1,0 +1,6 @@
+# Instructor's slides and personal notes stay local (put them in source/)
+source/*
+!source/README.md
+node_modules/
+.DS_Store
+Thumbs.db

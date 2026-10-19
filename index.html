@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>DigiComm Module 2 Drill</title>
+<meta name="description" content="Worked problems, design problems, recipes and a formula sheet for Digital Communications Module 2.">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=STIX+Two+Math&display=swap">
+<style>
+:root{
+  --bg:#f4f6f5;
+  --surface:#ffffff;
+  --surface-2:#eceef0;
+  --ink:#16202a;
+  --ink-soft:#4b5560;
+  --muted:#6b7680;
+  --line:#dbe0e0;
+  --accent:#146c5e;
+  --accent-ink:#ffffff;
+  --accent-soft:#e3efec;
+  --accent-2:#a5620a;
+  --accent-2-soft:#f6ead2;
+  --danger:#a13a3a;
+  --danger-soft:#f4e1e1;
+  --code-bg:#eef1ef;
+  --shadow:0 1px 2px rgba(22,32,42,.06), 0 6px 20px rgba(22,32,42,.05);
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0b1220; --surface:#111b2c; --surface-2:#16233a; --ink:#e4ebf2; --ink-soft:#b7c2d0; --muted:#8492a6; --line:#233350;
+    --accent:#3ddc97; --accent-ink:#06201a; --accent-soft:#12352c; --accent-2:#ffb454; --accent-2-soft:#2c2108;
+    --danger:#ff8a80; --danger-soft:#3a1a1a; --code-bg:#0e1930;
+    --shadow:0 1px 2px rgba(0,0,0,.3), 0 10px 30px rgba(0,0,0,.35);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0b1220; --surface:#111b2c; --surface-2:#16233a; --ink:#e4ebf2; --ink-soft:#b7c2d0; --muted:#8492a6; --line:#233350;
+  --accent:#3ddc97; --accent-ink:#06201a; --accent-soft:#12352c; --accent-2:#ffb454; --accent-2-soft:#2c2108;
+  --danger:#ff8a80; --danger-soft:#3a1a1a; --code-bg:#0e1930;
+  --shadow:0 1px 2px rgba(0,0,0,.3), 0 10px 30px rgba(0,0,0,.35);
+  color-scheme: dark;
+}
+*{box-sizing:border-box}
+html{scroll-padding-top:150px}
+body{
+  background:var(--bg); color:var(--ink);
+  font-family:"IBM Plex Sans",-apple-system,Segoe UI,Arial,sans-serif;
+  font-size:14px; padding-inline:16px; max-width:900px; margin:0 auto;
+}
+h1,h2,h3{font-family:"Archivo","IBM Plex Sans",sans-serif; letter-spacing:-.01em; text-wrap:balance; margin:0;}
+code,.formula,.mono{font-family:"IBM Plex Mono",ui-monospace,Consolas,monospace;}
+
+header.top{position:sticky; top:0; background:var(--bg); padding-block:14px 10px; z-index:20; border-bottom:1px solid var(--line);}
+.brand{display:flex; align-items:baseline; justify-content:space-between; gap:12px; flex-wrap:wrap;}
+.brand h1{font-size:1.3rem; font-weight:700;}
+.brand .eyebrow{font-family:"IBM Plex Mono",monospace; font-size:.68rem; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); font-weight:600;}
+.progress-pill{font-family:"IBM Plex Mono",monospace; font-size:.72rem; color:var(--ink-soft); background:var(--surface-2); border:1px solid var(--line); border-radius:999px; padding:4px 10px; white-space:nowrap;}
+nav.tabs{display:flex; gap:6px; overflow-x:auto; padding-top:12px; margin-inline:-16px; padding-inline:16px; scrollbar-width:none;}
+nav.tabs::-webkit-scrollbar{display:none}
+nav.tabs button{font-family:"IBM Plex Sans",sans-serif; font-size:.85rem; font-weight:600; color:var(--ink-soft); background:transparent; border:1px solid var(--line); border-radius:10px; padding:8px 13px; white-space:nowrap; cursor:pointer;}
+nav.tabs button.active{background:var(--accent); color:var(--accent-ink); border-color:var(--accent);}
+
+main{padding-block:20px 60px;}
+section.pane{display:none;}
+section.pane.active{display:block;}
+
+.card{background:var(--surface); border:1px solid var(--line); border-radius:14px; box-shadow:var(--shadow); padding:16px 18px; margin-bottom:14px;}
+.card h2{font-size:1.05rem; margin-bottom:4px;}
+.card .sub{color:var(--muted); font-size:.85rem; margin-bottom:10px;}
+
+.exam-note{background:var(--accent-2-soft); border:1px solid var(--accent-2); border-radius:10px; padding:10px 12px; font-size:.85rem; color:var(--ink); margin-block:0 14px;}
+.exam-note b{color:var(--accent-2);}
+
+.subtabs{display:flex; gap:6px; flex-wrap:wrap; margin-bottom:12px;}
+.subtabs button{font-family:"IBM Plex Mono",monospace; font-size:.75rem; font-weight:600; color:var(--ink-soft); background:var(--surface-2); border:1px solid var(--line); border-radius:8px; padding:6px 11px; cursor:pointer;}
+.subtabs button.active{background:var(--accent); color:var(--accent-ink); border-color:var(--accent);}
+.subtabs .sep{width:1px; background:var(--line); margin-inline:4px;}
+
+.note-sec{margin-bottom:16px;}
+.note-sec h3{font-size:1rem; margin-bottom:8px; padding-bottom:6px; border-bottom:2px solid var(--accent); display:inline-block;}
+.note-sec h4{font-size:.88rem; color:var(--accent); margin:14px 0 6px; font-family:"IBM Plex Mono",monospace; letter-spacing:.02em;}
+.note-sec p,.note-sec li{font-size:.9rem; line-height:1.55;}
+.note-sec ul,.note-sec ol{margin:6px 0 6px 1.2em; padding:0;}
+.note-sec li{margin-bottom:5px;}
+.callout{background:var(--surface-2); border-left:3px solid var(--accent); border-radius:0 8px 8px 0; padding:9px 12px; margin-block:10px; font-size:.87rem; line-height:1.5;}
+.callout .callout-tag{font-family:"IBM Plex Mono",monospace; font-size:.66rem; text-transform:uppercase; letter-spacing:.08em; color:var(--accent); font-weight:700; display:block; margin-bottom:3px;}
+
+.topic-h{font-family:"IBM Plex Mono",monospace; font-size:.72rem; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); margin:22px 0 8px; display:flex; align-items:center; gap:8px;}
+.topic-h::after{content:""; flex:1; height:1px; background:var(--line);}
+
+.formula-item{border-bottom:1px solid var(--line); padding-block:12px;}
+.formula-item:last-child{border-bottom:none;}
+.formula-name{font-weight:700; font-size:.9rem; margin-bottom:4px;}
+.formula-eq{background:var(--code-bg); border-radius:8px; padding:9px 11px; margin-block:6px; overflow-x:auto; font-family:"STIX Two Math","STIX Two Text",serif; font-size:1.15rem; line-height:1.8;}
+.math-block{background:var(--code-bg); border-radius:10px; padding:16px 14px; margin-block:10px; overflow-x:auto; text-align:center; font-family:"STIX Two Math","STIX Two Text",serif; font-size:1.45rem; color:var(--ink); line-height:1.9;}
+.math-block .frac,.formula-eq .frac{display:inline-flex; flex-direction:column; vertical-align:middle; margin:0 .22em; text-align:center; line-height:1.25; font-size:.92em;}
+.math-block .frac .num,.formula-eq .frac .num{border-bottom:1.5px solid currentColor; padding:0 .18em .08em;}
+.math-block .frac .den,.formula-eq .frac .den{padding:.08em .18em 0;}
+.math-block sup,.math-block sub,.formula-eq sup,.formula-eq sub{font-size:.68em;}
+.rt{border-top:1.5px solid currentColor; padding:.05em .1em 0; margin-left:.02em;}
+.formula-note{font-size:.82rem; color:var(--ink-soft); display:block; margin-block:4px;}
+.watch{color:var(--danger); font-weight:700;}
+
+/* problem cards */
+.prob{border:1px solid var(--line); border-radius:12px; padding:13px 15px; margin-bottom:12px; background:var(--surface);}
+.prob-head{display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:6px;}
+.prob-id{font-family:"IBM Plex Mono",monospace; font-size:.7rem; font-weight:700; letter-spacing:.06em; color:var(--accent); background:var(--accent-soft); border-radius:6px; padding:2px 8px;}
+.kind-tag{font-family:"IBM Plex Mono",monospace; font-size:.66rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); border:1px solid var(--line); border-radius:6px; padding:1px 7px;}
+.kind-tag.design{color:var(--accent-2); border-color:var(--accent-2); background:var(--accent-2-soft);}
+.status-chip{margin-left:auto; font-family:"IBM Plex Mono",monospace; font-size:.68rem; font-weight:700; border-radius:999px; padding:2px 9px; display:none;}
+.status-chip.solved{display:inline-block; color:var(--accent); background:var(--accent-soft);}
+.status-chip.missed{display:inline-block; color:var(--danger); background:var(--danger-soft);}
+.prob-title{font-weight:700; font-size:.95rem; margin-bottom:4px;}
+.prob-body{font-size:.9rem; color:var(--ink-soft); line-height:1.55;}
+.prob-body ul,.prob-body ol{margin:6px 0 6px 1.2em; padding:0;}
+.reveal-btn{margin-top:10px; font-family:"IBM Plex Sans",sans-serif; font-size:.8rem; font-weight:600; color:var(--accent); background:var(--accent-soft); border:1px solid var(--accent); border-radius:8px; padding:6px 11px; cursor:pointer;}
+.answer{margin-top:10px; padding-top:10px; border-top:1px dashed var(--line); font-size:.88rem; line-height:1.6;}
+.answer[hidden]{display:none;}
+.answer ol.steps{margin:6px 0 6px 1.3em; padding:0;}
+.answer ol.steps li{margin-bottom:6px;}
+.answer ul{margin:6px 0 6px 1.2em; padding:0;}
+.answer .formula-eq{margin-block:4px;}
+.grade{display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-top:12px; padding-top:10px; border-top:1px dashed var(--line);}
+.grade span{font-size:.8rem; color:var(--muted);}
+.grade button{font-family:"IBM Plex Sans",sans-serif; font-size:.78rem; font-weight:600; border-radius:8px; padding:5px 10px; cursor:pointer; border:1px solid var(--line); background:var(--surface-2); color:var(--ink-soft);}
+.grade button[data-g="solved"]{color:var(--accent); border-color:var(--accent); background:var(--accent-soft);}
+.grade button[data-g="missed"]{color:var(--danger); border-color:var(--danger); background:var(--danger-soft);}
+
+.trace-table{width:100%; border-collapse:collapse; margin-block:10px; font-size:.84rem;}
+.trace-table th,.trace-table td{border:1px solid var(--line); padding:6px 8px; text-align:center;}
+.trace-table th{background:var(--surface-2); font-family:"IBM Plex Mono",monospace; font-weight:600; font-size:.76rem;}
+.trace-table td.hl{background:var(--accent-soft); font-weight:700;}
+.table-wrap{overflow-x:auto;}
+
+/* drill */
+.drill-ctl{display:flex; flex-wrap:wrap; gap:14px; align-items:center; margin-bottom:12px;}
+.drill-ctl label{font-size:.85rem; display:flex; align-items:center; gap:5px; cursor:pointer;}
+.drill-ctl input{accent-color:var(--accent);}
+.drill-ctl select{font:inherit; padding:5px 8px; border-radius:8px; border:1px solid var(--line); background:var(--surface); color:var(--ink);}
+.big-btn{font-family:"IBM Plex Sans",sans-serif; font-size:.9rem; font-weight:700; color:var(--accent-ink); background:var(--accent); border:1px solid var(--accent); border-radius:10px; padding:9px 16px; cursor:pointer;}
+.timer{font-family:"IBM Plex Mono",monospace; font-size:.8rem; color:var(--muted); margin-left:auto;}
+.ghost-btn{font-family:"IBM Plex Sans",sans-serif; font-size:.8rem; font-weight:600; color:var(--ink-soft); background:transparent; border:1px solid var(--line); border-radius:8px; padding:6px 11px; cursor:pointer;}
+.missed-list{list-style:none; margin:8px 0 0; padding:0;}
+.missed-list li{padding:7px 0; border-bottom:1px solid var(--line); font-size:.88rem;}
+.missed-list li:last-child{border-bottom:none;}
+.missed-list a{color:var(--accent); font-weight:600; cursor:pointer; text-decoration:underline;}
+.empty{color:var(--muted); font-size:.88rem; padding:10px 0; text-align:center;}
+
+/* figures */
+figure.fig{margin:12px 0; padding:10px 8px 8px; background:var(--surface); border:1px solid var(--line); border-radius:10px; overflow-x:auto;}
+figure.fig svg{display:block; width:100%; max-width:600px; height:auto; margin:0 auto; color:var(--ink);}
+/* formula sheet: larger, proper math typography */
+#pane-formulas .card{padding:8px 18px;}
+#pane-formulas .formula-name{font-size:1rem; margin-bottom:6px;}
+#pane-formulas .math-block{font-size:1.75rem; padding:20px 16px; line-height:2;}
+#pane-formulas .formula-note{font-size:.88rem; line-height:1.5;}
+.math-block i,.formula-eq i{font-style:italic;}
+/* study plan */
+.night-head{display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;}
+.night-tag{font-family:"IBM Plex Mono",monospace; font-size:.7rem; font-weight:700; letter-spacing:.06em; color:var(--accent); background:var(--accent-soft); border-radius:6px; padding:2px 8px; text-transform:uppercase;}
+.night-mins{font-family:"IBM Plex Mono",monospace; font-size:.75rem; color:var(--muted);}
+ul.tasklist{list-style:none; margin:10px 0 0; padding:0; display:flex; flex-direction:column; gap:8px;}
+ul.tasklist li{display:flex; gap:10px; align-items:flex-start; padding:8px 10px; border-radius:9px; border:1px solid transparent;}
+ul.tasklist li.done{background:var(--accent-soft); border-color:var(--accent);}
+ul.tasklist li.done .tasktext{text-decoration:line-through; color:var(--muted);}
+ul.tasklist input[type=checkbox]{margin-top:3px; width:17px; height:17px; accent-color:var(--accent); flex:none;}
+.tasktext{font-size:.92rem; line-height:1.5;}
+.tasktext a,.note-sec a[data-concept],.note-sec a[data-goto]{color:var(--accent); font-weight:600; cursor:pointer; text-decoration:underline;}
+.taskmin{font-family:"IBM Plex Mono",monospace; font-size:.68rem; color:var(--muted); white-space:nowrap; margin-left:auto; padding-top:3px;}
+.plan-pill{font-family:"IBM Plex Mono",monospace; font-size:.75rem; color:var(--ink-soft); background:var(--surface-2); border:1px solid var(--line); border-radius:999px; padding:3px 10px; display:inline-block; margin-bottom:12px;}
+/* inline math in prose: same STIX math font as the equation boxes, slightly larger */
+.m{font-family:"STIX Two Math","STIX Two Text",serif; font-size:1.22em; line-height:1; letter-spacing:.01em; margin-inline:.06em;}
+.m i{font-style:italic;}
+.m sub,.m sup{font-size:.72em;}
+.trace-table .m{font-size:1.15em;}
+/* concepts */
+.qa{border:1px solid var(--line); border-radius:10px; background:var(--surface); margin:10px 0; padding:0;}
+.qa summary{cursor:pointer; padding:9px 12px; font-weight:600; font-size:.88rem; color:var(--accent); list-style:none;}
+.qa summary::-webkit-details-marker{display:none;}
+.qa summary::before{content:"? "; font-family:"IBM Plex Mono",monospace; font-weight:700;}
+.qa[open] summary{border-bottom:1px dashed var(--line);}
+.qa-a{padding:10px 12px; font-size:.88rem; line-height:1.6;}
+.practice{font-size:.86rem; margin:12px 0 4px; padding:8px 12px; background:var(--accent-soft); border-radius:8px;}
+.practice a{color:var(--accent); font-weight:700; cursor:pointer; text-decoration:underline; margin-inline:2px;}
+.note-sec table.trace-table{font-size:.84rem;}
+figure.fig svg.pz{max-width:340px;}
+figure.fig figcaption{font-size:.8rem; line-height:1.45; color:var(--ink-soft); margin-top:8px; text-align:center;}
+.fig text{fill:var(--ink); font-family:"IBM Plex Mono",ui-monospace,Consolas,monospace; font-size:11px;}
+.fig text.sm{font-size:10px; fill:var(--ink-soft);}
+.fig .ax{stroke:var(--muted); stroke-width:1.2; fill:none;}
+.fig .wave{stroke:var(--accent); stroke-width:1.8; fill:none;}
+.fig .circ{stroke:var(--muted); stroke-width:1; stroke-dasharray:3 3; fill:none;}
+.fig .dot{fill:var(--accent);}
+.fig .box{fill:var(--surface-2); stroke:var(--ink-soft); stroke-width:1.2;}
+.fig .arr{stroke:var(--ink-soft); stroke-width:1.3; fill:none;}
+.fig .roc{fill:var(--accent); fill-opacity:.16; stroke:none;}
+.fig .pole{stroke:var(--danger); stroke-width:2.2;}
+.fig .zero{stroke:var(--accent); stroke-width:2; fill:var(--surface);}
+
+footer.done{text-align:center; color:var(--muted); font-size:.8rem; padding-block:30px 10px;}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="brand">
+    <div>
+      <div class="eyebrow">Digital Communications · Module 2</div>
+      <h1>Module 2 — Exam Drill</h1>
+    </div>
+    <div class="progress-pill" id="progressPill">0 / 0 solved</div>
+  </div>
+  <nav class="tabs" id="tabs">
+    <button data-pane="plan" class="active">Study Plan</button>
+    <button data-pane="concepts">Concepts</button>
+    <button data-pane="problems">Sample Problems</button>
+    <button data-pane="design">Design Problems</button>
+    <button data-pane="drill">Drill</button>
+    <button data-pane="recipes">Recipes</button>
+    <button data-pane="formulas">Formula Sheet</button>
+    <button data-pane="cheat">Cheat List</button>
+  </nav>
+</header>
+
+<main>
+  <section class="pane active" id="pane-plan">
+    <div class="exam-note"><b>The plan:</b> sessions in topic order. Tick tasks off as you finish; progress is saved on this device. Blue links jump to the exact concept section or problem.</div>
+    <div class="card note-sec" id="planLoop"></div>
+    <div id="planQuick"></div>
+    <div id="planList"></div>
+  </section>
+
+  <section class="pane" id="pane-concepts">
+    <div class="exam-note"><b>Start here.</b> Each topic is explained in plain words: what every property <i>means</i>, a tiny example you can check by hand, and which problems to try next. Open the <i>? check yourself</i> boxes to test what you just read, then go to <i>Sample Problems</i>.</div>
+    <div class="subtabs" id="conceptTabs"></div>
+    <div id="conceptBody"></div>
+  </section>
+
+  <section class="pane" id="pane-problems">
+    <div class="exam-note"><b>How to use:</b> solve on paper first, then <i>Show solution</i> and grade yourself (<i>Got it</i> / <i>Missed</i>). Progress is saved on this device and drives the <i>Drill</i> and <i>Cheat List</i> tabs. Problems follow the module's own sample/practice problems where they could be recovered, plus original ones built on the same methods. Every numeric answer was machine-checked (<code>node verify.js</code>).</div>
+    <div class="subtabs" id="filtersProblems"></div>
+    <div id="listProblems"></div>
+  </section>
+
+  <section class="pane" id="pane-design">
+    <div class="exam-note"><b>Design problems</b> start from a spec (a bit rate, a bandwidth, a target error rate…) and end with a sized, checked system. The pattern is always: <i>spec → design / sizing → verify → trade-offs</i>.</div>
+    <div class="subtabs" id="filtersDesign"></div>
+    <div id="listDesign"></div>
+  </section>
+
+  <section class="pane" id="pane-drill">
+    <div class="exam-note">Draws one random problem from the pool you pick. Beat the clock, then grade yourself — <i>Missed</i> problems come back first in "Missed only" mode.</div>
+    <div class="card">
+      <div class="drill-ctl" id="drillCtl"></div>
+      <div id="drillOut"><p class="empty">Pick a pool and press <b>Draw a problem</b>.</p></div>
+    </div>
+  </section>
+
+  <section class="pane" id="pane-recipes"><div id="recipeList"></div></section>
+  <section class="pane" id="pane-formulas"><div id="formulaList"></div></section>
+
+  <section class="pane" id="pane-cheat">
+    <div class="exam-note">Last-minute list. Read the red flags first, then your own missed problems below.</div>
+    <div id="cheatStatic"></div>
+    <div class="card note-sec">
+      <h3>Your missed problems</h3>
+      <div id="missedBox"></div>
+      <p style="margin-top:12px"><button class="ghost-btn" id="resetBtn" type="button">Reset all progress</button></p>
+    </div>
+  </section>
+</main>
+
+<footer class="done">Built from the Digital Communications Module 2 notes.</footer>
+
+<script src="lib.js"></script>
+<script src="inline.js"></script>
+<script src="data/topics.js"></script>
+<script src="data/problems.js"></script>
+<script src="data/design.js"></script>
+<script src="data/concepts.js"></script>
+<script src="data/plan.js"></script>
+<script src="data/reference.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
