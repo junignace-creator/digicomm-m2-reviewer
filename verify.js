@@ -112,9 +112,51 @@ check('T2-07 zero ISI', [1, 2, 3].map(n => rcp(n / 6400 * (1 + 1e-9), 3200, 0.25
   check('T4-07 Qinv', x, 4.265, 1e-3); check('T4-07 E/N0', [ebn0, dB(ebn0)], [9.09, 9.59], 2e-3);
   check('T4-07 E', E, 3.64e-20, 2e-3); check('T4-07 Pr dBm', dBm(E * 1e6), -104.4, 1e-3); check('T4-07 BT', 0.5e6 * 1.35, 675e3); }
 
+// ================= M2-2 =================
+// ---- T5-02 transversal equalizer output
+check('T5-02', -0.1 * 0.3 + 1 * 1.1 + -0.2 * -0.4, 1.15);
+// ---- T5-03 input distortion D0
+check('T5-03', [0.5 / 1, 1 - 0.5, (0.6 + 0.5) / 1, 1 - 1.1], [0.5, 0.5, 1.1, -0.1]);
+// discrete convolution q_n = sum_j c_j f_{n-j}; c and f given as {index: value}
+const qconv = (c, f, n) => Object.keys(c).reduce((s, j) => s + c[j] * (f[n - j] || 0), 0);
+// ---- T5-04 infinite ZF: c_n = (-0.5)^n gives q = delta (truncate at 40 taps)
+{ const c = {}, f = { 0: 1, 1: 0.5 }; for (let n = 0; n < 40; n++) c[n] = Math.pow(-0.5, n);
+  check('T5-04 taps', [0, 1, 2, 3].map(n => c[n]), [1, -0.5, 0.25, -0.125]); check('T5-04 q', [0, 1, 2, 3, 10].map(n => qconv(c, f, n)), [1, 0, 0, 0, 0], 1e-9); }
+// ---- T5-05 3-tap ZF on f = {1, 0.5}
+{ const c = { '-1': 0, 0: 1, 1: -0.5 }, f = { 0: 1, 1: 0.5 };
+  check('T5-05 q', [-1, 0, 1, 2].map(n => qconv(c, f, n)), [0, 1, 0, -0.25]); check('T5-05 count', 2 * 1 + 1 + 1, 4);
+  check('T5-05 longer', [1, 2, 3].map(K => Math.pow(0.5, K + 1)), [0.25, 0.125, 0.0625]); }
+// ---- T5-06 3-tap ZF on f = {-1: 0.1, 0: 1, 1: -0.2}: solve, then residual
+{ const f = { '-1': 0.1, 0: 1, 1: -0.2 }, c0 = 1 / (0.02 + 1 + 0.02), c = { '-1': -0.1 * c0, 0: c0, 1: 0.2 * c0 };
+  check('T5-06 taps', [c['-1'], c[0], c[1]], [-0.09615, 0.96154, 0.19231], 1e-4);
+  check('T5-06 forced', [-1, 0, 1].map(n => qconv(c, f, n)), [0, 1, 0], 1e-12);
+  check('T5-06 residual', [qconv(c, f, -2), qconv(c, f, 2)], [-0.0096, -0.0385], 3e-3);
+  check('T5-06 D', [(0.1 + 0.2) / 1, Math.abs(qconv(c, f, -2)) + Math.abs(qconv(c, f, 2))], [0.3, 0.048], 3e-3); }
+// ---- T5-07 MSE vs ZF gains, N0 = 0.01
+check('T5-07 ZF', [1, 0.5, 0.01].map(F => 1 / F), [1, 2, 100]);
+check('T5-07 MSE', [1, 0.5, 0.01].map(F => F / (F * F + 0.01)), [0.990, 1.923, 0.990], 1e-3);
+check('T5-07 noise power', (1 / 0.01) ** 2, 10000);
+// ---- T5-08 DFE on f = {1, 0.5}, data +1 -1 -1 +1
+{ const I = [1, -1, -1, 1], vk = I.map((x, k) => x + 0.5 * (k ? I[k - 1] : 0)), c1 = -1 * 0.5;
+  let prev = 0; const out = vk.map(x => { const e = x + c1 * prev; prev = Math.sign(e); return e; });
+  check('T5-08 v', vk, [1, -0.5, -1.5, 0.5]); check('T5-08 c1', c1, -0.5); check('T5-08 out', out, I); }
+// ---- T6-01 phase error
+check('T6-01', [0, 30, 60].map(d => Math.cos(d * Math.PI / 180)), [1, 0.866, 0.5], 1e-3);
+check('T6-01 dB', [30, 60].map(d => 20 * Math.log10(Math.cos(d * Math.PI / 180))), [-1.25, -6.02], 2e-3);
+check('T6-01 90', Math.cos(Math.PI / 2), 0, 1e-12);
+{ const A = 0.7, B = 0.3; check('T6-01 identity', Math.cos(A) * Math.cos(B), 0.5 * (Math.cos(A - B) + Math.cos(A + B))); }
+// ---- T6-02 one-shot ML phase (X = (T0/2)cos, Y = (T0/2)sin)
+check('T6-02', [Math.atan2(0.25, 0.433), Math.atan2(0.433, -0.25)].map(r => r * 180 / Math.PI), [30, 120], 1e-3);
+check('T6-02 naive', Math.atan(0.433 / -0.25) * 180 / Math.PI, -60, 1e-3);
+// ---- T6-03 early sample on the triangle
+check('T6-03', [1 * (1e-3 - 0.1e-3), 20 * Math.log10(0.9)], [0.9e-3, -0.915], 1e-3);
+check('T6-03 signs', [1 * 1, 1 * -1, -1 * 1, -1 * -1], [1, -1, -1, 1]);
+// ---- T6-04 sampling instants
+{ const T = 1 / 2400; check('T6-04', [T, ...[0, 1, 2, 3].map(n => n * T + 0.1e-3)], [416.667e-6, 100e-6, 516.667e-6, 933.333e-6, 1350e-6], 1e-5); }
+
 // ---- data integrity: ids unique, topics valid, every link resolves
 const ctx = { console }; vm.createContext(ctx);
-['lib.js', 'data/topics.js', 'data/problems.js', 'data/glossary.js', 'data/concepts.js', 'data/plan.js', 'data/reference.js']
+['lib.js', 'data/topics.js', 'data/problems.js', 'data/problems-m22.js', 'data/glossary.js', 'data/glossary-m22.js', 'data/concepts.js', 'data/concepts-m22.js', 'data/plan.js', 'data/reference.js', 'data/reference-m22.js']
   .forEach(f => vm.runInContext(fs.readFileSync(f, 'utf8'), ctx, { filename: f }));
 vm.runInContext('this.__d = { PROBLEMS, TOPICS, CONCEPTS, PLAN, GLOSSARY }', ctx);
 const { PROBLEMS, TOPICS, CONCEPTS, PLAN, GLOSSARY } = ctx.__d;

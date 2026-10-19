@@ -68,7 +68,28 @@ var PLAN = {
       ]
     },
     {
-      day: 'Session 5', focus: 'Mixed review',
+      day: 'Session 5', focus: 'T5 · Channel models and equalizers (M2-2)',
+      tasks: [
+        ['Read ' + C(5, 1, 3) + ': channel models (cave analogy), why equalize, where the equalizer goes, the tapped delay line.', '30m'],
+        ['Solve ' + P('T5-01', 'T5-02') + '.', '20m'],
+        ['Read ' + C(5, 4) + ' (peak distortion → zero forcing). Then solve ' + P('T5-03', 'T5-04', 'T5-05', 'T5-06') + ' with <b>Recipes → 3-tap zero-forcing design</b>.', '60m'],
+        ['Read ' + C(5, 5, 6) + ' (MSE criterion, DFE). Solve ' + P('T5-07', 'T5-08') + '.', '40m'],
+        ['Essay practice: ' + P('T5-09') + '.', '15m'],
+        ['<b>Identification</b> tab → filter T5, switch on <i>Quiz me</i>, and say every definition out loud before revealing it. Repeat the ones you missed.', '15m']
+      ]
+    },
+    {
+      day: 'Session 6', focus: 'T6 · Carrier and symbol-timing synchronization (M2-2)',
+      tasks: [
+        ['Read ' + C(6, 1, 4) + ': pilot vs suppressed carrier, why the phase matters, PLL vs one-shot.', '30m'],
+        ['Solve ' + P('T6-01', 'T6-02') + '.', '25m'],
+        ['Read ' + C(6, 5, 6) + ': timing recovery vs timing phase, early/late, decision-directed vs non-decision-directed.', '25m'],
+        ['Solve ' + P('T6-03', 'T6-04') + ', then the essay ' + P('T6-05') + '.', '40m'],
+        ['<b>Identification</b> tab → filter T6, switch on <i>Quiz me</i>, and say every definition out loud before revealing it. Repeat the ones you missed.', '15m']
+      ]
+    },
+    {
+      day: 'Session 7', focus: 'Mixed review',
       tasks: [
         ['<b>Drill</b> tab, all topics, "Unsolved + missed": 6 problems against the clock.', '60m'],
         ['Formula Sheet: cover the right side and recite each formula.', '20m'],

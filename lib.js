@@ -205,3 +205,26 @@ function curveFig(o) {
   });
 }
 function sinc(x) { return x === 0 ? 1 : Math.sin(Math.PI * x) / (Math.PI * x); }
+
+/* ---------- M2-2 block diagrams ---------- */
+function svgMul(cx, cy) { return '<circle cx="' + cx + '" cy="' + cy + '" r="11" class="box"/>' + svgT(cx, cy + 4, '×', '', ''); }
+/* 3-tap linear transversal equalizer (K = 1) */
+function tdlFig() {
+  return svgFig(560, 262, 'Linear transversal equalizer with K = 1: the samples move right through the z<sup>−1</sup> delays, each tap is weighted by c<sub>j</sub>, and the weighted taps are summed. c<sub>−1</sub> (precursor) sees the future sample v<sub>k+1</sub>, c<sub>1</sub> (postcursor) the past sample v<sub>k−1</sub>.', 'tapped delay line equalizer', function (id) {
+    var s = svgT(14, 44, 'v', '', 'start') + svgL(26, 50, 125, 50, 'arr') + svgB(125, 32, 70, 36, 'z⁻¹') + svgL(195, 50, 325, 50, 'arr') + svgB(325, 32, 70, 36, 'z⁻¹') + svgL(395, 50, 450, 50, 'arr');
+    [[90, 'c₋₁', 'v(k+1)'], [275, 'c₀', 'v(k)'], [450, 'c₁', 'v(k−1)']].forEach(function (t) {
+      s += svgDot(t[0], 50) + svgP([[t[0], 50], [t[0], 109]], id) + svgT(t[0] + 6, 84, t[2], 'sm', 'start') + svgMul(t[0], 120) + svgP([[t[0] - 44, 120], [t[0] - 11, 120]], id) + svgT(t[0] - 48, 124, t[1], '', 'end');
+    });
+    s += svgP([[90, 131], [90, 200], [264, 200]], id) + svgP([[450, 131], [450, 200], [286, 200]], id) + svgP([[275, 131], [275, 189]], id) + svgS(275, 200);
+    s += svgP([[275, 211], [275, 246]], id) + svgT(283, 240, 'Î(k) → quantize → Ĩ(k)', 'sm', 'start');
+    return s;
+  }, 460);
+}
+/* decision-feedback equalizer */
+function dfeFig() {
+  return svgFig(560, 200, 'Decision-feedback equalizer: the feedforward filter works on the received samples; the feedback filter works on past <i>decisions</i> Ĩ and its output is added before the detector.', 'decision feedback equalizer', function (id) {
+    return svgT(10, 54, 'v(k)', 'sm', 'start') + svgP([[10, 60], [70, 60]], id) + svgB(70, 38, 120, 44, 'Feedforward|filter') + svgP([[190, 60], [239, 60]], id) + svgS(250, 60) +
+      svgP([[261, 60], [320, 60]], id) + svgT(290, 52, 'Î(k)', 'sm', '') + svgB(320, 38, 120, 44, 'Symbol-by-symbol|detector') + svgP([[440, 60], [548, 60]], id) + svgT(500, 52, 'Ĩ(k)', 'sm', '') +
+      svgL(480, 60, 480, 150, 'arr') + svgP([[480, 150], [440, 150]], id) + svgB(320, 128, 120, 44, 'Feedback filter|(past decisions)') + svgL(320, 150, 250, 150, 'arr') + svgP([[250, 150], [250, 71]], id) + svgT(256, 112, '+', 'sm', 'start');
+  }, 460);
+}
