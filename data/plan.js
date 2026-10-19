@@ -17,7 +17,8 @@ var PLAN = {
       ['Nyquist bandwidth and raised-cosine bandwidth: ' + P('T2-01', 'T2-03', 'T2-04') + '. Read ' + C(2, 3) + ' and ' + C(2, 6) + '.', '35m'],
       ['Q-function with normalisation: ' + P('T3-01', 'T3-04') + '. Read ' + C(3, 3) + '.', '25m'],
       ['Matched filter examples from the slides: ' + P('T4-01', 'T4-02', 'T4-03') + '.', '40m'],
-      ['ISI by hand: ' + P('T1-02') + '. Then read the whole <b>Cheat List</b>.', '25m']
+      ['ISI by hand: ' + P('T1-02') + '.', '15m'],
+      ['<b>Identification</b> tab, all topics, Quiz me + Shuffle: one full pass. Then read the whole <b>Cheat List</b>.', '30m']
     ]
   },
   sessions: [
@@ -27,7 +28,8 @@ var PLAN = {
         ['Read ' + C(1, 1, 2) + ': the block diagram and why three convolutions become one p(t).', '20m'],
         ['Solve ' + P('T1-01') + ' (PNRZ and s(t)).', '15m'],
         ['Read ' + C(1, 3, 4) + ' (ISI, the pulse-shaping problem).', '15m'],
-        ['Solve ' + P('T1-02', 'T1-03', 'T1-04') + ' using <b>Recipes → ISI at a sampling instant</b>.', '40m']
+        ['Solve ' + P('T1-02', 'T1-03', 'T1-04') + ' using <b>Recipes → ISI at a sampling instant</b>.', '40m'],
+        ['<b>Identification</b> tab → filter T1, switch on <i>Quiz me</i>, and say every definition out loud before revealing it. Repeat the ones you missed.', '15m']
       ]
     },
     {
@@ -37,7 +39,8 @@ var PLAN = {
         ['Solve ' + P('T2-01') + '.', '10m'],
         ['Read ' + C(2, 5, 6) + ' (raised cosine, α, B<sub>T</sub>).', '25m'],
         ['Solve ' + P('T2-02', 'T2-03', 'T2-04', 'T2-05', 'T2-06') + '.', '50m'],
-        ['Design: ' + P('DS-01') + '.', '20m']
+        ['Bit-rate design: ' + P('T2-07') + '.', '20m'],
+        ['<b>Identification</b> tab → filter T2, switch on <i>Quiz me</i>, and say every definition out loud before revealing it. Repeat the ones you missed.', '15m']
       ]
     },
     {
@@ -46,7 +49,8 @@ var PLAN = {
         ['Read ' + C(3, 1, 3) + '. Practise reading the Q-table on Q(1), Q(2), Q(2.5).', '30m'],
         ['Solve ' + P('T3-01', 'T3-02', 'T3-04') + '.', '35m'],
         ['Read ' + C(3, 4, 7) + ' (CLT, stationarity, autocorrelation, PSD, white noise).', '35m'],
-        ['Solve ' + P('T3-03', 'T3-05', 'T3-06', 'T3-07') + '.', '40m']
+        ['Solve ' + P('T3-03', 'T3-05', 'T3-06', 'T3-07') + '.', '40m'],
+        ['<b>Identification</b> tab → filter T3, switch on <i>Quiz me</i>, and say every definition out loud before revealing it. Repeat the ones you missed.', '15m']
       ]
     },
     {
@@ -56,7 +60,8 @@ var PLAN = {
         ['Solve the slide examples ' + P('T4-01', 'T4-02') + ' with <b>Recipes → Matched-filter output</b>.', '35m'],
         ['Solve ' + P('T4-03', 'T4-04', 'T4-05') + '.', '30m'],
         ['Read ' + C(4, 4) + ' and solve ' + P('T4-06') + '.', '25m'],
-        ['Design: ' + P('DS-02') + '.', '25m']
+        ['Power budget: ' + P('T4-07') + '.', '25m'],
+        ['<b>Identification</b> tab → filter T4, switch on <i>Quiz me</i>, and say every definition out loud before revealing it. Repeat the ones you missed.', '15m']
       ]
     },
     {
@@ -64,6 +69,7 @@ var PLAN = {
       tasks: [
         ['<b>Drill</b> tab, all topics, "Unsolved + missed": 6 problems against the clock.', '60m'],
         ['Formula Sheet: cover the right side and recite each formula.', '20m'],
+        ['<b>Identification</b>, all topics, Quiz me + Shuffle, twice.', '25m'],
         ['Redo everything marked <i>Missed</i>, then read the Cheat List.', '40m']
       ]
     }

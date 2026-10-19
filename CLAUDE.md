@@ -5,12 +5,15 @@ The user chats with Claude about this repo to add problems, fix answers, and dri
 
 ## Conventions
 - Topics live in `data/topics.js` (`TOPICS = { T1: 'T1 · …', … }`). Filters, list headings and drill checkboxes are built from it — no topic ids are hard-coded in `app.js`.
-- Problems: `PROBLEMS.push({id, lec, kind, title, q, a})` in `data/problems.js` (solve) and `data/design.js` (design).
-  - `id`: `T<n>-NN` for solve, `DS-NN` for design. `lec` is a `TOPICS` key. Keep problems ordered by topic.
+- **Focus: sample problems + identification. No design-problem section** (user preference for DigiComm — exam is computation + ID).
+- Problems: `PROBLEMS.push({id, lec, kind: 'solve', title, q, a})` in `data/problems.js`.
+  - `id`: `T<n>-NN`. `lec` is a `TOPICS` key. Keep problems ordered by topic.
   - `q`/`a` are HTML. Helpers in `lib.js`: `steps`, `tbl`, `mb`, `frac`, `rt`, `note`, `warn`, `qa`, `use`, `callout`, plus SVG figures.
   - Use `−` (U+2212) for minus in prose; unicode or `<sub>/<sup>` for sub/superscripts.
 - **Every numeric claim must be backed by a `check(...)` in `verify.js`.** Helpers there: `Q`, `erfc`, `dB`, `undB`, `dBm`, `log2`, `k_B`.
   `verify.js` also checks unique ids, valid topics, that every `data-goto` link resolves, and that every problem appears in the study plan once sessions exist.
+- Identification terms: `data/glossary.js`, `GLOSSARY = [[term, definition, topic]]`. Add terms for every new topic (definitions 1–2 sentences,
+  phrased the way the slides/lecturer phrase them). Each study-plan session gets an Identification task.
 - Inline math is auto-formatted by `inline.js`; formula sheet runs `mathify()`. Don't hand-italicize.
 - localStorage keys: `digicomm-m2-state-v1`, `digicomm-m2-plan-v1`, `digicomm-m2-concept-tab` — don't rename without migrating.
 - Preview: `node serve.js` → http://localhost:8123.
@@ -27,7 +30,7 @@ Record here which slide problems were used directly and any assumptions made whe
 
 ## Status
 - 2026-10-20: skeleton created.
-- 2026-10-20: M2-1 Part 1 added (topics T1–T4, 23 solve + 2 design). Videos 1–2 covered up to the Q-function; later videos
+- 2026-10-20: M2-1 Part 1 added (topics T1–T4, 25 sample problems, 73 ID terms). Videos 1–2 covered up to the Q-function; later videos
   (CLT → eye pattern) not yet received. M2-2 (Equalization & Synchronization) PDF exists in the user's OneDrive Documents\Digicomms folder but not added yet.
 - Summative 2 on 2026-10-24 covers Module 1 only, not M2-1.
 

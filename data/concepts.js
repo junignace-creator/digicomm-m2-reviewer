@@ -120,7 +120,7 @@ var CONCEPTS = [
       <p>αW is the <b>excess bandwidth</b> beyond the Nyquist minimum — hence "excess-bandwidth factor". α = 0.3 means 30 % more bandwidth than the ideal; α = 1 doubles it.</p>
       <p><b>The trade-off:</b> larger α → easier filter and faster tail decay (robust to timing error), but more bandwidth.</p>
       ${qa('R<sub>b</sub> = 10 kbps, α = 0.3. B<sub>T</sub>?', 'W = 5 kHz, B<sub>T</sub> = 5 × 1.3 = 6.5 kHz.')}
-      ${use(['T2-03', 'T2-04', 'DS-01'])}`
+      ${use(['T2-03', 'T2-04', 'T2-07'])}`
     }
   ]
 },
@@ -239,7 +239,7 @@ var CONCEPTS = [
       html: `
       <p>Without noise, y(t) = g(t) ∗ g(T − t) is the autocorrelation of g centred on t = T. Its maximum is at t = T and equals ∫g² = E. That is why the switch samples at t = T.</p>
       ${callout('Error probability link', 'For polar ±g: y(T) = ±E + noise with variance (N<sub>0</sub>/2)E, so P<sub>e</sub> = Q(√(2E/N<sub>0</sub>)) = Q(√SNR<sub>max</sub>).')}
-      ${use(['DS-02'])}`
+      ${use(['T4-07'])}`
     },
     {
       h: '4. The eye pattern',

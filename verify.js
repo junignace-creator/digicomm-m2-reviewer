@@ -99,25 +99,27 @@ check('T4-04', integ(t => 2 * Math.sin(Math.PI * t) ** 2, 0, 1), 1, 1e-6);
 { const num = integ(t => (t <= 0.5 ? 1 : 0), 0, 1) ** 2, den = 0.5 * 0.5; check('T4-05', [(num / den) / 2, dB(0.5)], [0.5, -3.01], 1e-3); }
 // ---- T4-06
 check('T4-06 levels', [1 + 0.2 + 0.1, 1 + 0.2 - 0.1, 1 - 0.2 + 0.1, 1 - 0.2 - 0.1], [1.3, 1.1, 0.9, 0.7]); check('T4-06 opening', 2 * 0.7, 1.4);
-// ---- DS-01
-check('DS-01', [4000 / 1.25, 2 * 3200, 1 / 6400, 3200 * 0.75, 2 * 3200 - 2400, 2 * 4000, 2 * 4000 / 2], [3200, 6400, 156.25e-6, 2400, 4000, 8000, 4000]);
-check('DS-01 zero ISI', [1, 2, 3].map(n => rcp(n / 6400 * (1 + 1e-9), 3200, 0.25)), [0, 0, 0], 1e-6); // n = 2 is the 0/0 point t = 1/(4αW); limit (π/4)·sinc(2) = 0
-// ---- DS-02
+// ---- T2-07
+check('T2-07', [4000 / 1.25, 2 * 3200, 1 / 6400, 3200 * 0.75, 2 * 3200 - 2400, 2 * 4000, 2 * 4000 / 2], [3200, 6400, 156.25e-6, 2400, 4000, 8000, 4000]);
+check('T2-07 zero ISI', [1, 2, 3].map(n => rcp(n / 6400 * (1 + 1e-9), 3200, 0.25)), [0, 0, 0], 1e-6); // n = 2 is the 0/0 point t = 1/(4αW); limit (π/4)·sinc(2) = 0
+// ---- T4-07
 { const x = Qinv(1e-5), ebn0 = x * x / 2, N0 = k_B * 290, E = ebn0 * N0;
-  check('DS-02 Qinv', x, 4.265, 1e-3); check('DS-02 E/N0', [ebn0, dB(ebn0)], [9.09, 9.59], 2e-3);
-  check('DS-02 E', E, 3.64e-20, 2e-3); check('DS-02 Pr dBm', dBm(E * 1e6), -104.4, 1e-3); check('DS-02 BT', 0.5e6 * 1.35, 675e3); }
+  check('T4-07 Qinv', x, 4.265, 1e-3); check('T4-07 E/N0', [ebn0, dB(ebn0)], [9.09, 9.59], 2e-3);
+  check('T4-07 E', E, 3.64e-20, 2e-3); check('T4-07 Pr dBm', dBm(E * 1e6), -104.4, 1e-3); check('T4-07 BT', 0.5e6 * 1.35, 675e3); }
 
 // ---- data integrity: ids unique, topics valid, every link resolves
 const ctx = { console }; vm.createContext(ctx);
-['lib.js', 'data/topics.js', 'data/problems.js', 'data/design.js', 'data/concepts.js', 'data/plan.js', 'data/reference.js']
+['lib.js', 'data/topics.js', 'data/problems.js', 'data/glossary.js', 'data/concepts.js', 'data/plan.js', 'data/reference.js']
   .forEach(f => vm.runInContext(fs.readFileSync(f, 'utf8'), ctx, { filename: f }));
-vm.runInContext('this.__d = { PROBLEMS, TOPICS, CONCEPTS, PLAN }', ctx);
-const { PROBLEMS, TOPICS, CONCEPTS, PLAN } = ctx.__d;
+vm.runInContext('this.__d = { PROBLEMS, TOPICS, CONCEPTS, PLAN, GLOSSARY }', ctx);
+const { PROBLEMS, TOPICS, CONCEPTS, PLAN, GLOSSARY } = ctx.__d;
+const terms = new Set();
+GLOSSARY.forEach(g => { ok('glossary entry shape ' + g[0], g.length === 3 && g[1].length > 10); ok('glossary topic ' + g[0], g[2] in TOPICS); ok('duplicate term ' + g[0], !terms.has(g[0])); terms.add(g[0]); });
 const ids = new Set();
 PROBLEMS.forEach(p => {
   ok('duplicate id ' + p.id, !ids.has(p.id)); ids.add(p.id);
   ok(p.id + ': unknown topic ' + p.lec, p.lec in TOPICS);
-  ok(p.id + ': kind', p.kind === 'solve' || p.kind === 'design');
+  ok(p.id + ': kind', p.kind === 'solve');
   ok(p.id + ': leftover ${', !/\$\{/.test(p.q + p.a));
 });
 const allText = v => typeof v === "string" ? v : v && typeof v === "object" ? Object.values(v).map(allText).join(" ") : "";

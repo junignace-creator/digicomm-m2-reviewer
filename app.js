@@ -8,7 +8,6 @@ var LEC_NAMES = TOPICS; /* from data/topics.js: { T1: '…', T2: '…' } */
 var LEC_IDS = Object.keys(LEC_NAMES);
 var byId = {}; PROBLEMS.forEach(function (p) { byId[p.id] = p; });
 var SOLVE = PROBLEMS.filter(function (p) { return p.kind === 'solve'; });
-var DESIGN = PROBLEMS.filter(function (p) { return p.kind === 'design'; });
 
 function updateProgress() {
   var done = PROBLEMS.filter(function (p) { return state[p.id] === 'solved'; }).length;
@@ -21,8 +20,7 @@ function probCard(p, onGrade) {
   var div = document.createElement('div');
   div.className = 'prob'; div.id = 'prob-' + p.id;
   div.innerHTML =
-    '<div class="prob-head"><span class="prob-id">' + p.id + '</span><span class="kind-tag ' + p.kind + '">' + (p.kind === 'design' ? 'Design' : 'Solve') + '</span>' +
-    '<span class="kind-tag">' + p.lec + '</span><span class="status-chip"></span></div>' +
+    '<div class="prob-head"><span class="prob-id">' + p.id + '</span><span class="kind-tag">' + p.lec + '</span><span class="status-chip"></span></div>' +
     '<div class="prob-title">' + inlineMath(p.title) + '</div><div class="prob-body">' + inlineMath(p.q) + '</div>' +
     '<button class="reveal-btn" type="button">Show solution</button>' +
     '<div class="answer" hidden>' + inlineMath(p.a) +
@@ -79,11 +77,11 @@ function showPane(name) {
 }
 document.getElementById('tabs').addEventListener('click', function (e) { var b = e.target.closest('button[data-pane]'); if (b) showPane(b.dataset.pane); });
 
-var listP, listD;
+var listP;
 function gotoProblem(id) {
   var p = byId[id]; if (!p) return;
-  var l = p.kind === 'design' ? listD : listP; l.filters.lec = 'all'; l.filters.st = 'all'; l.redraw();
-  showPane(p.kind === 'design' ? 'design' : 'problems');
+  listP.filters.lec = 'all'; listP.filters.st = 'all'; listP.redraw();
+  showPane('problems');
   var el = document.getElementById('prob-' + id); if (el) el.scrollIntoView({ block: 'start' });
 }
 
@@ -94,15 +92,13 @@ function buildDrill() {
   var ctl = document.getElementById('drillCtl'), out = document.getElementById('drillOut');
   ctl.innerHTML =
     LEC_IDS.map(function (l) { return '<label><input type="checkbox" data-lec="' + l + '" checked>' + l + '</label>'; }).join('') +
-    '<label><input type="checkbox" id="dSolve" checked>Solve</label><label><input type="checkbox" id="dDesign" checked>Design</label>' +
     '<select id="dPool"><option value="open">Unsolved + missed</option><option value="missed">Missed only</option><option value="all">Everything</option></select>' +
     '<button class="big-btn" id="dGo" type="button">Draw a problem</button>';
   function pool() {
     var lecs = Array.prototype.map.call(ctl.querySelectorAll('input[data-lec]:checked'), function (i) { return i.dataset.lec; });
-    var kinds = []; if (document.getElementById('dSolve').checked) kinds.push('solve'); if (document.getElementById('dDesign').checked) kinds.push('design');
     var mode = document.getElementById('dPool').value;
     return PROBLEMS.filter(function (p) {
-      if (lecs.indexOf(p.lec) < 0 || kinds.indexOf(p.kind) < 0) return false;
+      if (lecs.indexOf(p.lec) < 0) return false;
       var s = state[p.id] || '';
       return mode === 'all' || (mode === 'missed' ? s === 'missed' : s !== 'solved');
     });
@@ -120,6 +116,36 @@ function buildDrill() {
     document.getElementById('dNext').addEventListener('click', draw);
   }
   document.getElementById('dGo').addEventListener('click', draw);
+}
+
+/* ----- identification (glossary) ----- */
+function buildGlossary() {
+  var f = { lec: 'all', q: '', quiz: false }, order = GLOSSARY.map(function (g, i) { return i; });
+  var bar = document.getElementById('glossFilters'), list = document.getElementById('glossList');
+  function draw() {
+    bar.innerHTML = ['all'].concat(LEC_IDS).map(function (l) { return '<button type="button" data-lec="' + l + '" class="' + (f.lec === l ? 'active' : '') + '">' + (l === 'all' ? 'All topics' : l) + '</button>'; }).join('') +
+      '<span class="sep"></span><button type="button" data-act="quiz" class="' + (f.quiz ? 'active' : '') + '">Quiz me</button><button type="button" data-act="shuffle">Shuffle</button><button type="button" data-act="reset">A–Z order</button>';
+    var q = f.q.trim().toLowerCase(), n = 0;
+    list.className = 'card' + (f.quiz ? ' quiz' : '');
+    list.innerHTML = order.map(function (i) {
+      var g = GLOSSARY[i];
+      if (f.lec !== 'all' && g[2] !== f.lec) return '';
+      if (q && (g[0] + ' ' + g[1]).replace(/<[^>]+>/g, '').toLowerCase().indexOf(q) < 0) return '';
+      n++;
+      return '<div class="gloss-item"><div class="gloss-term">' + g[0] + '<span class="kind-tag">' + g[2] + '</span></div><div class="gloss-def">' + inlineMath(g[1]) + '</div></div>';
+    }).join('') || '<p class="empty">No terms match.</p>';
+  }
+  bar.addEventListener('click', function (e) {
+    var b = e.target.closest('button'); if (!b) return;
+    if (b.dataset.lec) f.lec = b.dataset.lec;
+    else if (b.dataset.act === 'quiz') f.quiz = !f.quiz;
+    else if (b.dataset.act === 'shuffle') { for (var i = order.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)), t = order[i]; order[i] = order[j]; order[j] = t; } }
+    else if (b.dataset.act === 'reset') order = GLOSSARY.map(function (g, i) { return i; }).sort(function (x, y) { return GLOSSARY[x][0].replace(/<[^>]+>/g, '').localeCompare(GLOSSARY[y][0].replace(/<[^>]+>/g, '')); });
+    draw();
+  });
+  list.addEventListener('click', function (e) { var it = e.target.closest('.gloss-item'); if (it && f.quiz) it.classList.toggle('shown'); });
+  document.getElementById('glossSearch').addEventListener('input', function (e) { f.q = e.target.value; draw(); });
+  draw();
 }
 
 /* ----- recipes, formulas, cheat ----- */
@@ -217,10 +243,9 @@ function renderMissed() {
 document.getElementById('missedBox').addEventListener('click', function (e) { var a = e.target.closest('a[data-id]'); if (a) gotoProblem(a.dataset.id); });
 document.getElementById('resetBtn').addEventListener('click', function () {
   if (!confirm('Clear all Got it / Missed marks on this device?')) return;
-  state = {}; saveState(); updateProgress(); renderMissed(); listP.redraw(); listD.redraw();
+  state = {}; saveState(); updateProgress(); renderMissed(); listP.redraw();
 });
 
 listP = buildList('Problems', SOLVE);
-listD = buildList('Design', DESIGN);
-renderPlan(); renderConcepts(); buildDrill(); renderRecipes(); renderFormulas(); renderCheat(); renderMissed(); updateProgress();
+renderPlan(); renderConcepts(); buildGlossary(); buildDrill(); renderRecipes(); renderFormulas(); renderCheat(); renderMissed(); updateProgress();
 (function () { var h = (location.hash || '').slice(1); if (h && document.getElementById('pane-' + h)) showPane(h); })();

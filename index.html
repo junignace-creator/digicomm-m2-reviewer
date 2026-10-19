@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>DigiComm Module 2 Drill</title>
-<meta name="description" content="Worked problems, design problems, recipes and a formula sheet for Digital Communications Module 2.">
+<meta name="description" content="Sample problems, identification terms, recipes and a formula sheet for Digital Communications Module 2.">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=STIX+Two+Math&display=swap">
 <style>
 :root{
@@ -108,7 +108,16 @@ section.pane.active{display:block;}
 .prob-head{display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:6px;}
 .prob-id{font-family:"IBM Plex Mono",monospace; font-size:.7rem; font-weight:700; letter-spacing:.06em; color:var(--accent); background:var(--accent-soft); border-radius:6px; padding:2px 8px;}
 .kind-tag{font-family:"IBM Plex Mono",monospace; font-size:.66rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); border:1px solid var(--line); border-radius:6px; padding:1px 7px;}
-.kind-tag.design{color:var(--accent-2); border-color:var(--accent-2); background:var(--accent-2-soft);}
+/* identification */
+.gloss-search{width:100%; padding:10px 12px; border-radius:10px; border:1px solid var(--line); background:var(--surface); color:var(--ink); font:inherit; font-size:.95rem; margin-bottom:12px;}
+.gloss-item{padding-block:10px; border-bottom:1px solid var(--line);}
+.gloss-item:last-child{border-bottom:none;}
+.gloss-term{font-weight:700; font-size:.92rem; display:flex; gap:8px; align-items:baseline;}
+.gloss-term .kind-tag{font-size:.62rem;}
+.gloss-def{font-size:.88rem; color:var(--ink-soft); margin-top:3px; line-height:1.5;}
+.quiz .gloss-item{cursor:pointer;}
+.quiz .gloss-item:not(.shown) .gloss-def{filter:blur(6px); user-select:none;}
+.quiz .gloss-item:not(.shown) .gloss-def::before{content:"tap to reveal · ";}
 .status-chip{margin-left:auto; font-family:"IBM Plex Mono",monospace; font-size:.68rem; font-weight:700; border-radius:999px; padding:2px 9px; display:none;}
 .status-chip.solved{display:inline-block; color:var(--accent); background:var(--accent-soft);}
 .status-chip.missed{display:inline-block; color:var(--danger); background:var(--danger-soft);}
@@ -218,7 +227,7 @@ footer.done{text-align:center; color:var(--muted); font-size:.8rem; padding-bloc
     <button data-pane="plan" class="active">Study Plan</button>
     <button data-pane="concepts">Concepts</button>
     <button data-pane="problems">Sample Problems</button>
-    <button data-pane="design">Design Problems</button>
+    <button data-pane="ident">Identification</button>
     <button data-pane="drill">Drill</button>
     <button data-pane="recipes">Recipes</button>
     <button data-pane="formulas">Formula Sheet</button>
@@ -246,10 +255,11 @@ footer.done{text-align:center; color:var(--muted); font-size:.8rem; padding-bloc
     <div id="listProblems"></div>
   </section>
 
-  <section class="pane" id="pane-design">
-    <div class="exam-note"><b>Design problems</b> start from a spec (a bit rate, a bandwidth, a target error rate…) and end with a sized, checked system. The pattern is always: <i>spec → design / sizing → verify → trade-offs</i>.</div>
-    <div class="subtabs" id="filtersDesign"></div>
-    <div id="listDesign"></div>
+  <section class="pane" id="pane-ident">
+    <div class="exam-note"><b>For the identification part.</b> Search any term, or switch on <i>Quiz me</i>: definitions are hidden, read the term, say the definition out loud, then tap to check. <i>Shuffle</i> mixes the order so you are not memorising the sequence.</div>
+    <input class="gloss-search" id="glossSearch" type="search" placeholder="Search terms (e.g. &quot;roll-off&quot;, &quot;WSS&quot;, &quot;matched&quot;)…">
+    <div class="subtabs" id="glossFilters"></div>
+    <div class="card" id="glossList"></div>
   </section>
 
   <section class="pane" id="pane-drill">
@@ -280,7 +290,7 @@ footer.done{text-align:center; color:var(--muted); font-size:.8rem; padding-bloc
 <script src="inline.js"></script>
 <script src="data/topics.js"></script>
 <script src="data/problems.js"></script>
-<script src="data/design.js"></script>
+<script src="data/glossary.js"></script>
 <script src="data/concepts.js"></script>
 <script src="data/plan.js"></script>
 <script src="data/reference.js"></script>

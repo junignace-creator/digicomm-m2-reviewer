@@ -15,8 +15,8 @@ Part 1 (M2-1, Baseband Pulse Transmission) is in; Part 2 (equalization & synchro
 
 - **Study Plan** — sessions in topic order; tick tasks off, links jump to the concept section or problem.
 - **Concepts** — plain-language explanation of every idea, a tiny hand-checkable example each, self-check questions.
-- **Sample Problems** (23) — worked solutions in steps. Self-grade each with *Got it* / *Missed*.
-- **Design Problems** (2) — spec → design / sizing → verify → trade-offs.
+- **Sample Problems** (25) — worked solutions in steps. Self-grade each with *Got it* / *Missed*.
+- **Identification** (73 terms) — searchable glossary with a *Quiz me* mode (definitions hidden until tapped) and shuffle, for the ID part of the exam.
 - **Drill** — random problem from a pool you pick, with a timer.
 - **Recipes**, **Formula Sheet** and **Cheat List**.
 
@@ -45,7 +45,7 @@ inline.js          auto-formats inline math in prose
 lib.js             math helpers + SVG generators
 data/topics.js     Module 2 topic list (drives filters, headings, drill)
 data/problems.js   solve problems
-data/design.js     design problems
+data/glossary.js   identification terms
 data/concepts.js   concept notes
 data/plan.js       study plan
 data/reference.js  recipes, formula sheet, cheat list
