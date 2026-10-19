@@ -16,6 +16,7 @@ CONCEPTS.push(
         ['LTV filter + noise', 'r = s ∗ h(τ, t) + n = ∫h(τ, t)s(t − τ)dτ + n', 'filter changes with time: time-varying multipath, e.g. urban reflections at different delays']
       ])}
       ${callout('Lecture analogy: speaking in a cave', 'Your voice is the transmitted signal and the cave is the channel. The cave reshapes your voice; the echoey sound you hear is the <b>convolution</b> of your voice with the cave. Convolution = flip one function, slide it with a delay, integrate the product.')}
+      ${where([['r(t)','received signal'],['s(t)','transmitted signal'],['n(t)','additive noise'],['α','attenuation factor (how much the channel weakens the signal)'],['h(t)','impulse response of the LTI channel filter'],['h(τ, t)','LTV channel: response at time t to an impulse applied at t − τ'],['τ','delay (integration variable)']])}
       <p>In a passband system the modulator sits after the transmit filter and the demodulator before the receive filter; baseband just leaves them out.</p>
       ${use(['T5-01'])}`
     },
@@ -165,6 +166,7 @@ CONCEPTS.push(
       h: '6. Decision-directed vs non-decision-directed timing',
       html: `
       <p>Both: matched filter → d/dt (slope) → sample at nT + τ̂ → multiply → Σ → VCC adjusts τ̂.</p>
+      ${where([['d/dt','slope (derivative) of the matched-filter output'],['nT + τ̂','sampling instant for symbol n with the current timing estimate τ̂'],['I<sub>n</sub>','detected symbol n (±1) — used by the decision-directed loop'],['y<sub>n</sub>','the sample itself — used by the non-decision-directed loop'],['VCC','voltage-controlled clock that moves the sampling instants']])}
       ${tbl(['', 'decision-directed', 'non-decision-directed'], [
         ['slope multiplied by', 'the detected symbol I<sub>n</sub> (±1)', 'the sample y<sub>n</sub> itself'],
         ['pros', 'normalized, simple, less affected by noise', 'does not rely on previous decisions'],

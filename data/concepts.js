@@ -20,6 +20,7 @@ var CONCEPTS = [
         <li><b>Channel</b> h(t) (+ noise) → x(t).</li>
         <li><b>Receive filter</b> q(t) → y(t), then <b>sample</b> at t = iT<sub>b</sub> and <b>compare with a threshold</b>.</li>
       </ol>
+        ${where([['b<sub>k</sub>','the k-th bit from the source, either 0 or 1'],['T<sub>b</sub>','bit duration: the time given to one bit (s). One bit leaves the source every T<sub>b</sub> seconds; bit rate R<sub>b</sub> = 1/T<sub>b</sub>'],['k','bit/symbol index at the transmitter (bit number 0, 1, 2, …), sent at t = kT<sub>b</sub>'],['a<sub>k</sub>','the voltage level chosen for bit k by the line code (e.g. +A or −A)'],['A','pulse amplitude (V)'],['g(t)','transmit filter: the pulse shape given to every symbol'],['s(t)','transmitted signal = the sum of all the shaped pulses'],['h(t)','channel impulse response (how the channel filters the signal)'],['x(t)','signal at the channel output (what reaches the receiver)'],['q(t)','receive filter impulse response'],['y(t)','receive-filter output, the signal that gets sampled'],['i','sample index at the receiver: the i-th sample is taken at t = iT<sub>b</sub>'],['t','time (s)']])}
       ${qa('Why is a rectangular pulse a problem on a band-limited channel?', 'Its sharp edges need many high-frequency harmonics, i.e. a wide bandwidth. A band-limited channel removes those harmonics and the pulse spreads out in time.')}
       ${use(['T1-01'])}`
     },
@@ -30,6 +31,7 @@ var CONCEPTS = [
       ${mb('p(t) = g(t) ∗ h(t) ∗ q(t) &nbsp;⇒&nbsp; y(t) = Σ<sub>k</sub> a<sub>k</sub> p(t − kT<sub>b</sub>)')}
       ${where([['p(t)','overall pulse shape seen at the receive-filter output'],['g(t)','transmit (pulse-shaping) filter impulse response'],['h(t)','channel impulse response'],['q(t)','receive filter impulse response'],['∗','convolution'],['y(t)','received signal after the receive filter (before sampling)'],['a<sub>k</sub>','level-encoded symbol number k (e.g. +A or −A in polar NRZ)'],['k','symbol index at the transmitter (which bit was sent)'],['T<sub>b</sub>','bit duration (s); symbol k is launched at t = kT<sub>b</sub>']])}
       <p>So the whole system behaves like "each symbol launches one copy of p(t), delayed by kT<sub>b</sub>". In the frequency domain: P(f) = G(f)H(f)Q(f).</p>
+      ${where([['P(f), G(f), H(f), Q(f)','frequency responses (Fourier transforms) of p, g, h, q — convolution in time becomes multiplication in frequency'],['f','frequency (Hz)']])}
       <p><b>k vs i:</b> k is the transmitter's symbol index (when a bit was sent); i is the receiver's sampling index (when we look). We want sample i to give us symbol i.</p>
       ${qa('With g = rectangle of width T<sub>b</sub>, ideal channel, q = same rectangle, what is p(t)?', 'A triangle of base 2T<sub>b</sub> (rect ∗ rect). It peaks at one point and is zero one bit period either side — see T1-03.')}
       ${use(['T1-03'])}`
@@ -50,6 +52,7 @@ var CONCEPTS = [
       h: '4. The pulse-shaping problem',
       html: `
       <p>The channel H(f) is given — we cannot change it. We <i>can</i> choose the transmit filter G(f) and the receive filter Q(f). Choose them so that:</p>
+      ${where([['H(f)','channel frequency response (given, fixed)'],['G(f)','transmit filter frequency response (we design it)'],['Q(f)','receive filter frequency response (we design it)']])}
       <ol><li><b>ISI is zero</b>, and</li><li><b>bandwidth is conserved</b> (use as little as possible).</li></ol>
       <p>The answer starts with the Nyquist channel (T2).</p>`
     }
@@ -73,6 +76,7 @@ var CONCEPTS = [
       h: '2. Nyquist criterion (frequency domain)',
       html: `
       <p>Sampling p(t) every T<sub>b</sub> makes its spectrum repeat every R<sub>b</sub> = 1/T<sub>b</sub>. If the samples are just one impulse √E δ(t), their spectrum is flat. Setting the two equal gives the criterion:</p>
+      ${where([['R<sub>b</sub>','bit rate = 1/T<sub>b</sub>; sampling every T<sub>b</sub> repeats the spectrum every R<sub>b</sub> Hz'],['δ(t)','Dirac impulse; its spectrum is flat (constant at all frequencies)'],['E','pulse energy (J); √E = p(0)']])}
       ${mb(frac('1', 'T<sub>b</sub>') + ' Σ<sub>n</sub> P(f − n/T<sub>b</sub>) = √E &nbsp; (= 1 for a normalised pulse)')}
       ${where([['P(f)','spectrum (Fourier transform) of the overall pulse p(t)'],['f','frequency (Hz)'],['n','replica number: P(f − n/T<sub>b</sub>) is the copy of P(f) shifted by n·R<sub>b</sub>'],['1/T<sub>b</sub> = R<sub>b</sub>','bit rate (bits/s) — also the sampling rate at the receiver'],['E','pulse energy (J)']])}
       <p><b>Meaning:</b> slide copies of P(f) by every multiple of R<sub>b</sub> and add them up; the total must be <b>flat</b>. No gaps, no bumps.</p>
@@ -143,6 +147,7 @@ var CONCEPTS = [
       h: '1. AWGN: additive, white, Gaussian',
       html: `
       <p>The channel noise is modelled as <b>additive white Gaussian noise</b>: x(t) = s(t) + n(t).</p>
+      ${where([['x(t)','received signal at the channel output'],['s(t)','transmitted signal'],['n(t)','channel noise (AWGN)']])}
       <ul>
         <li><b>Additive</b> — it simply adds to the signal.</li>
         <li><b>White</b> — present at all frequencies in equal amounts (like white light): flat PSD N<sub>0</sub>/2.</li>
@@ -163,6 +168,7 @@ var CONCEPTS = [
         <li>A weighted sum of N independent Gaussians is Gaussian.</li>
         <li>Uncorrelated (zero covariance) Gaussians are also independent — special to Gaussians.</li>
       </ol>
+        ${where([['X','a Gaussian random variable'],['N(μ, σ²)','shorthand for ’Gaussian with mean μ and variance σ²’'],['c','any constant'],['N','number of variables being added']])}
       ${qa('X ~ N(0, 4). Distribution of 2X − 1?', 'N(−1, 16): mean 2·0 − 1, variance 2²·4.')}
       ${use(['T3-02'])}`
     },
@@ -170,6 +176,7 @@ var CONCEPTS = [
       h: '3. PDF, CDF and the Q-function',
       html: `
       <p><b>CDF</b> F<sub>X</sub>(x) = Pr{X ≤ x} = area under the PDF from −∞ to x. It rises from 0 to 1. Pr{a ≤ X ≤ b} = F(b) − F(a); Pr{X > a} = 1 − F(a).</p>
+      ${where([['F<sub>X</sub>(x)','cumulative distribution function (CDF): probability that X is at most x'],['Pr{·}','probability of the event in braces'],['a, b','any two values (interval limits)'],['−∞','the far left of the PDF; the CDF adds up area from there']])}
       <p><b>PDF</b> is never negative, has total area 1, and is the derivative of the CDF.</p>
       <p>The Gaussian CDF has no closed form, so we use a table of the <b>Q-function</b> — the upper tail of the <i>standard</i> Gaussian N(0, 1):</p>
       ${mb('Q(x) = Pr{Z > x} = 1 − Φ(x) = ' + frac('1', '√(2π)') + '∫<sub>x</sub><sup>∞</sup> e<sup>−s²/2</sup> ds')}
@@ -182,6 +189,7 @@ var CONCEPTS = [
       h: '4. Central limit theorem — why noise is Gaussian',
       html: `
       <p>If X<sub>1</sub> … X<sub>n</sub> are i.i.d. (independent, identically distributed, with finite mean and variance), the normalised sum Z = (Y − E[Y])/σ<sub>Y</sub> of Y = ΣX<sub>i</sub> tends to N(0, 1) as n grows — <i>whatever</i> the individual distribution.</p>
+      ${where([['X<sub>1</sub> … X<sub>n</sub>','n independent random variables with the same distribution'],['n','how many variables are added'],['Y','their sum, ΣX<sub>i</sub>'],['E[Y]','mean (expected value) of Y'],['σ<sub>Y</sub>','standard deviation of Y'],['Z','normalised sum: (Y − mean)/std. dev.'],['N(0, 1)','standard Gaussian: mean 0, variance 1']])}
       <p>Thermal noise is the sum of a huge number of tiny independent electron contributions, so it is Gaussian.</p>
       <p>"Statistically independent" means the variables are uncorrelated; "identically distributed" means they share the same PDF — Gaussian or not. Normalising = subtract the mean, then divide by the standard deviation.</p>
       ${callout('Why the lecturer cares', 'Once something is Gaussian we know all its properties and can use the Q-function. The CLT is what lets us call white noise a <b>Gaussian random process</b>.')}
@@ -199,6 +207,7 @@ var CONCEPTS = [
         <li><b>2nd-order stationary:</b> the joint distribution of samples at (t<sub>1</sub>, t<sub>2</sub>) equals that at (t<sub>1</sub> + Δt, t<sub>2</sub> + Δt) ⇒ covariance and correlation (<b>two-point statistics</b>) depend only on the lag τ = t<sub>2</sub> − t<sub>1</sub>, not on absolute time.</li>
         <li><b>SSS</b> (strict sense): stationary for every order k and every time shift — mathematically complex to show. <b>WSS</b> (wide sense): only 1st and 2nd order — sufficient for communications computations.</li>
       </ul>
+        ${where([['X(t)','the random process (the whole ensemble)'],['x<sub>i</sub>(t)','one realization (sample function), e.g. one audio generator'],['X(t<sub>1</sub>)','the random variable obtained by freezing the process at time t<sub>1</sub>'],['t<sub>1</sub>, t<sub>2</sub>','two observation times'],['Δt','any time shift'],['τ','lag between the two observations, t<sub>2</sub> − t<sub>1</sub>'],['k','order of stationarity (number of time points considered)']])}
       <p><b>Noise as a random process:</b> each electron's motion is like a random variable; the circuit's huge number of electrons is an ensemble ⇒ a random process. Adding them all (CLT) makes it Gaussian. So channel noise is a <b>WSS Gaussian random process</b>.</p>
       <p>A random process is described in the <b>amplitude domain</b> (PDF, CDF) or the <b>time domain</b> (autocorrelation, PSD).</p>
       ${use(['T3-09'])}`
@@ -212,6 +221,7 @@ var CONCEPTS = [
       <ol><li>R<sub>X</sub>(0) = E[X²] = average power (voltage squared with a normalised 1 Ω resistance, then averaged).</li><li>Even: R<sub>X</sub>(−τ) = R<sub>X</sub>(τ) — the left side mirrors the right.</li><li>Maximum at 0: R<sub>X</sub>(0) ≥ |R<sub>X</sub>(τ)| — a signal matches itself best with no delay (in magnitude; R can be negative elsewhere).</li></ol>
       <p><b>PSD</b> (W/Hz): how the power is distributed across frequency. For a <i>deterministic</i> signal it is just the Fourier transform of the signal. Our signals are <i>random</i> (the data and the noise are random), so we use <b>Wiener–Khintchine</b>: the PSD is the Fourier transform of the <b>autocorrelation</b>, S<sub>X</sub>(f) = ∫R<sub>X</sub>(τ)e<sup>−j2πfτ</sup>dτ.</p>
       <p>PSD properties: area under S<sub>X</sub>(f) = E[X²] (W/Hz × Hz = W, the power); S<sub>X</sub>(f) ≥ 0; even in f; and through a filter: <b>S<sub>Y</sub>(f) = |H(f)|² S<sub>X</sub>(f)</b> — squared because the PSD comes from the autocorrelation, which is already a product of two samples.</p>
+      ${where([['R<sub>X</sub>(τ)','autocorrelation of the process X(t) at lag τ'],['τ','lag (delay) between the two samples (s)'],['E[·]','expectation (average over the ensemble)'],['E[X²]','mean-square value = average power'],['S<sub>X</sub>(f)','power spectral density of X (W/Hz)'],['S<sub>Y</sub>(f)','PSD at the output of a filter'],['H(f)','filter frequency response; |H(f)|² is its power gain'],['e<sup>−j2πfτ</sup>','Fourier-transform kernel'],['f','frequency (Hz)']])}
       ${use(['T3-05'])}`
     },
     {
@@ -261,6 +271,7 @@ var CONCEPTS = [
       h: '2. Cauchy–Schwarz ⇒ the matched filter',
       html: `
       <p>Cauchy–Schwarz: (∫uv)² ≤ ∫u² ∫v², with equality when u = kv (like |A·B|² ≤ |A|²|B|² for vectors). Applied to the numerator:</p>
+      ${where([['u, v','any two (real) functions — here u = g(T − τ) and v = h(τ)'],['k','any constant'],['A·B','dot product of two vectors (the same inequality in vector form)']])}
       ${mb('SNR ≤ ' + frac('2P<sub>d</sub>', 'N<sub>0</sub>') + '∫|g(T − τ)|²dτ = ' + frac('2E', 'N<sub>0</sub>') + 'P<sub>d</sub>')}
       ${where([['E','pulse energy, ∫|g(T − τ)|²dτ = ∫|g(t)|²dt (unchanged by folding/shifting)'],['P<sub>d</sub>','data-symbol power (1 if normalised)'],['N<sub>0</sub>','noise density (W/Hz)'],['2E/N<sub>0</sub>·P<sub>d</sub>','the maximum SNR, reached by the matched filter']])}
       <p>Equality — the maximum — when</p>
@@ -282,6 +293,7 @@ var CONCEPTS = [
       <p>Without noise, y(t) = g(t) ∗ g(T − t) is the autocorrelation of g centred on t = T. Its maximum is at t = T and equals ∫g² = E. That is why the switch samples at t = T.</p>
       ${callout('As done in lecture: convolution case by case (rectangle A on 0…T)', 'Slide the folded signal across the filter and integrate the product over the overlap only:<br>• <b>t &lt; 0</b>: no overlap ⇒ y = 0 (the signal has not entered the filter).<br>• <b>0 ≤ t ≤ T</b>: overlap 0…t ⇒ y = ∫<sub>0</sub><sup>t</sup>A²dτ = A²t (rising line).<br>• <b>T ≤ t ≤ 2T</b>: overlap t − T…T ⇒ y = ∫<sub>t−T</sub><sup>T</sup>A²dτ = A²(2T − t) (falling line).<br>• <b>t &gt; 2T</b>: the signal has fully left ⇒ y = 0.<br>Peak A²T at t = T, where the overlap is complete. (The lecturer corrected the integration limits of the third case in class: lower t − T, upper T. Use a different dummy variable τ inside the integral from the limit t.)')}
       ${callout('Error probability link', 'For polar ±g: y(T) = ±E + noise with variance (N<sub>0</sub>/2)E, so P<sub>e</sub> = Q(√(2E/N<sub>0</sub>)) = Q(√SNR<sub>max</sub>).')}
+      ${where([['P<sub>e</sub>','bit-error probability'],['Q(·)','Q-function (Gaussian tail probability)'],['E','pulse energy (J)'],['N<sub>0</sub>/2','two-sided noise PSD (W/Hz)'],['SNR<sub>max</sub>','matched-filter output SNR, 2E/N<sub>0</sub>']])}
       ${use(['T4-07'])}`
     },
     {
@@ -297,6 +309,7 @@ var CONCEPTS = [
       </ul>
       <p><b>Purpose:</b> it shows at a glance how badly the signal is distorted. The best time to sample is usually the <b>middle</b> of the symbol, where the eye is widest and the noise margin is largest; distortion at that instant shrinks the margin. The slope of the sides also tells you whether you are sampling <b>early or late</b>. Ideally all zero crossings meet at one point; channel distortion or noise spreads them.</p>
       <p>Noise makes the traces fuzzy; ISI splits them into separate paths. M-level signals give M − 1 eyes stacked vertically, with decision boundaries half-way between levels.</p>
+      ${where([['M','number of signal levels (M = 2 binary, M = 4 for levels ±1, ±3)']])}
       ${callout('Lecture example: 4-level PAM', 'Levels +3, +1, −1, −3. Every possible transition between levels is overlaid, giving 3 eyes. Sample at the middle of the eye and compare with the boundaries <b>+2, 0, −2</b>.')}
       ${callout('With vs without bandwidth limitation', 'Without a bandwidth limit (filter much wider than the signal) the eyes are clean and wide open. With a bandwidth limit the eyes are less open ⇒ more chance of misdetection. Every real system is band-limited, so the receive filter bandwidth matters: <b>too narrow ⇒ ISI</b> (some traces leave the usual paths, more timing-sensitive, can\'t sample near the zero crossings); <b>too wide ⇒ more noise</b> (the opening shrinks).')}
       ${use(['T4-06', 'T4-08'])}`

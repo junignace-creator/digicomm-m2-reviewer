@@ -161,7 +161,7 @@ const ctx = { console }; vm.createContext(ctx);
 vm.runInContext('this.__d = { PROBLEMS, TOPICS, CONCEPTS, PLAN, GLOSSARY, FORMULAS }', ctx);
 const { PROBLEMS, TOPICS, CONCEPTS, PLAN, GLOSSARY, FORMULAS } = ctx.__d;
 // every expression in Concepts and every formula needs a variable legend (where())
-CONCEPTS.forEach(c => c.sections.forEach(s => { const mbs = (s.html.match(/class="math-block"/g) || []).length, ws = (s.html.match(/class="where"/g) || []).length; ok(c.label + ' / ' + s.h + ': ' + mbs + ' expressions but ' + ws + ' legends', mbs === ws); }));
+CONCEPTS.forEach(c => c.sections.forEach(s => { const mbs = (s.html.match(/class="math-block"/g) || []).length, ws = (s.html.match(/class="where"/g) || []).length; ok(c.label + ' / ' + s.h + ': ' + mbs + ' expressions but ' + ws + ' legends', ws >= mbs); }));
 FORMULAS.forEach(g => g.items.forEach(it => ok('formula without vars: ' + it.name, Array.isArray(it.vars) && it.vars.length > 0)));
 const terms = new Set();
 GLOSSARY.forEach(g => { ok('glossary entry shape ' + g[0], g.length === 3 && g[1].length > 10); ok('glossary topic ' + g[0], g[2] in TOPICS); ok('duplicate term ' + g[0], !terms.has(g[0])); terms.add(g[0]); });
