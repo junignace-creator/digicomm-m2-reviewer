@@ -194,6 +194,8 @@ function curveFig(o) {
     var s = svgL(ml - 6, y0, W - mr + 6, y0, 'ax') + svgL(x0, top - 6, x0, H - bot + 6, 'ax') + svgT(W - mr + 4, y0 - 6, o.xl || 't', 'sm', 'end');
     (o.xt || []).forEach(function (t) { s += svgL(X(t[0]), y0 - 3, X(t[0]), y0 + 3, 'ax') + svgT(X(t[0]), y0 + 15, t[1], 'sm', ''); });
     (o.yt || []).forEach(function (t) { s += svgL(x0 - 3, Y(t[0]), x0 + 3, Y(t[0]), 'ax') + svgL(ml, Y(t[0]), W - mr, Y(t[0]), 'grid') + svgT(ml - 4, Y(t[0]) + 4, t[1], 'sm', 'end'); });
+    (o.xg || []).forEach(function (x) { s += svgL(X(x), top, X(x), H - bot, 'grid'); });
+    (o.txt || []).forEach(function (t) { s += svgT(X(t[0]), Y(t[1]), t[2], 'sm', ''); });
     o.series.forEach(function (se, k) {
       var pts = [], i, n = 400, d = '';
       for (i = 0; i <= n; i++) { var x = o.xlo + (o.xhi - o.xlo) * i / n, y = se.fn(x); pts.push(isFinite(y) ? X(x).toFixed(1) + ',' + Y(Math.max(o.ylo - 1, Math.min(o.yhi + 1, y))).toFixed(1) : null); }
